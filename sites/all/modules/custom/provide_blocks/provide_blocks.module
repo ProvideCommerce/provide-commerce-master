@@ -1,0 +1,414 @@
+﻿<?php
+
+function provide_blocks_menu() {
+  $items = array();
+
+  $items['contact/%'] = array(
+    'page callback' => 'contact_forms',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+/*
+ $items['about-us/our-story/%'] = array(
+    'page callback' => 'our_story',
+    'title' => 'Our Story',
+    'page arguments' => array(2),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+*/
+  return $items;
+}
+
+
+function our_story($tid){
+
+	return '';
+}
+
+//create the block to list in the blocks list
+
+/**
+ * Implementation of hook_block_info().
+ */
+function provide_blocks_block_info() {
+  $blocks = array();
+  $blocks['weather-single'] = array(
+    'info' => t('Custom: Weather Single'),
+  );
+  $blocks['weather-forecast'] = array(
+    'info' => t('Custom: Weather Forecast'),
+  );
+  $blocks['some-block'] = array(
+    'info' => t('Custom: Some Block'),
+  );
+  $blocks['footer-legal-block'] = array(
+    'info' => t('Custom: Footer Legal Block'),
+  );
+ $blocks['contact-block'] = array(
+    'info' => t('Custom: Contact Us'),
+  );
+  $blocks['timeline-block'] = array(
+  	'info' => t('Custom: Timeline'),
+  );
+  $blocks['address-block'] = array(
+  	'info' => t('Custom: Address Block'),
+  );
+  $blocks['benefits-block'] = array(
+  	'info' => t('Custom: Benefits'),
+  );
+  $blocks['what-we-stand-for-block'] = array(
+  	'info' => t('Custom: What We Stand For'),
+  );
+  $blocks['media-block'] = array(
+  	'info' => t('Custom: Media Block'),
+  );
+  $blocks['giving-back-block'] = array(
+  	'info' => t('Custom: Giving Back Block'),
+  );
+  $blocks['giving-back-form-block'] = array(
+  	'info' => t('Custom: Giving Back Form Block'),
+  );
+  $blocks['promo-life-at-provide'] = array(
+  	'info' => t('Promo: Life at Provide'),
+  );
+  $blocks['promo-our-brands'] = array(
+  	'info' => t('Promo: Our Brands'),
+  );
+  $blocks['promo-our-values'] = array(
+  	'info' => t('Promo: Our Values'),
+  );
+  $blocks['promo-our-people'] = array(
+  	'info' => t('Promo: Our People'),
+  );
+  $blocks['promo-our-story'] = array(
+  	'info' => t('Promo: Our Story'),
+  );
+  
+  $blocks['promo-job-alerts'] = array(
+  	'info' => t('Promo: Job Alerts'),
+  );
+  
+  $blocks['google-map'] = array(
+  	'info' => t('Custom: Google Map'),
+  );
+  
+  $blocks['contact-us-image'] = array(
+  	'info' => t('Custom: Contact Us Image'),
+  );
+	
+  return $blocks;
+}
+
+
+// create the call back for a block
+
+/**
+ * Implementation of hook_block_view().
+ */
+function provide_blocks_block_view($delta='') {
+    $block = array();
+    switch ($delta) {
+        case 'weather-single':
+            $block['subject'] = '';
+            $block['content'] = weather_single();
+        	break;
+        case 'weather-forecast':
+            $block['subject'] = '';
+            $block['content'] = weather_forecast();
+        	break;
+	    case 'contact-block':
+	        $block['subject'] = '';
+	        $block['content'] = contact_us();
+	       break;
+        case 'some-block':
+            $block['subject'] = '';
+            $block['content'] = '<div class="isotope-element isotope-element-4 isotope-item" data-category="weather" style="position: absolute; left: 0px; top: 0px; -webkit-transform: translate3d(520px, 161px, 0px); "></div>';
+        	break;
+        case 'footer-legal-block':
+        	$block['subject'] = '';
+            $block['content'] = '<div id="footer-legal">&copy; 1998-2012 Provide Commerce, Inc. All rights reserved.</div>';
+        	break;
+        case 'timeline-block':
+        	$block['subject'] = '';
+            $block['content'] = '<div id="timelinePreview"><div id="timelineLeftColumn"><div class="year"><a href="/about-us/our-story#year2012">2012</a></div><div class="imageLg" id="tl_personal_creations"><div class="tl_text">Acquired in 2010, Personal Creations is the latest addition to the family of brands.</div></div><div class="imageSm" id="tl_proplants"><div class="tl_text">In 2010 we launch ProPlants as an organic extension of the ProFlowers brand.</div></div><div class="imageLg" id="tl_best_places"><div class="tl_text">In 2008 Employers Group recognizes Provide Commerce as one of "California\'s Best Places to Work".</div></div><div class="imageSm" id="tl_sharis_berries"><div class="tl_text">In 2006 Shari\'s Berries is acquired and merged with Secret Spoon.</div></div><div class="year"><a href="/about-us/our-story#year2005">2005</a></div><div class="imageSm" id="tl_cherry_moon_farms"><div class="tl_text">Cherry Moon Farms is launched in 2003 as Provide Commerce begins to include a wider range of perishable goods.</div></div><div class="year"><a href="/about-us/our-story#year2003">2003</a></div><div class="imageLg" id="tl_proflowers"><div class="tl_text">The ProFlowers revolution launches by offering one dozen roses for $29.99.</div></div></div><div id="timelineCenterColumn"></div><div id="timelineRightColumn"><div class="imageLg" id="tl_chris"><div class="tl_text">Chris Shimojima joins Provide Commerce as the first new CEO in 13 years!</div></div><div class="year"><a href="/about-us/our-story#year2010">2010</a></div><div class="imageLg" id="tl_redenvelope"><div class="tl_text">We enter the non-perishable gifting market by purchasing RedEnvelope&rsquo;s assets from bankruptcy in June 2008. </div></div><div class="year"><a href="/about-us/our-story#year2008">2008</a></div><div class="imageSm" id="tl_proflowers_box"><div class="tl_text">In 2006 we introduce the new ProFlowers logo and box design.</div></div><div class="year"><a href="/about-us/our-story#year2006">2006</a></div><div class="imageLg" id="tl_liberty"><div class="tl_text">In 2005, Provide Commerce is acquired by Liberty Media Corporation for $477M.</div></div><div class="imageSm" id="tl_nasdaq"><div class="tl_text">Provide Commerce goes public and opens the stock market on December 17, 2003.</div> </div><div class="year"><a href="/about-us/our-story#year1998">1998</a></div></div></div>';
+        	break;
+        case 'address-block':
+        	$block['subject'] = '';
+            $block['content'] = '<div class="contact-info">';
+			$block['content'] .= '<div class="location">';
+			$block['content'] .= '<p class="intro">We\'re located at</p>';
+			$block['content'] .= '<p class="address">4840 Eastgate Mall</p>';
+			$block['content'] .= '<p class="address">San Diego, CA 92121</p>';
+			$block['content'] .= '<p><a href="http://maps.google.com/maps?f=d&source=s_q&hl=en&geocode=%3BCTGtRELXzt0sFWbB9QEd_5cD-SkLbJMVOgfcgDHWzTchxYp6eQ&q=Provide+Commerce&aq=&sll=37.269174,-119.306607&sspn=13.118819,26.191406&ie=UTF8&hq=Provide+Commerce&hnear=&t=h&ll=32.894002,-117.211761&spn=0.167202,0.322723&z=11&vpsrc=6&iwloc=A&daddr=Provide+Commerce+Inc,+4840+Eastgate+Mall,+San+Diego,+CA+92121" target="_blank">Get Directions</a></p>';
+			$block['content'] .= '</div>';
+			$block['content'] .= '<div class="phone">';
+			$block['content'] .= '<p class="intro">Our phone number is</p>';
+			$block['content'] .= '<p class="number">858-729-2800</p>';
+			$block['content'] .= '</div>';
+			$block['content'] .= '<div class="social">';
+			$block['content'] .= '<p class="intro">Facebook</p>';
+			$block['content'] .= '<p class="sociallink"><a href="http://www.facebook.com/ProvideCommerce/">facebook.com/ProvideCommerce</a></p>';
+			$block['content'] .= '<p class="intro">LinkedIn</p>';
+			$block['content'] .= '<p class="sociallink"><a href="http://www.linkedin.com/company/provide-commerce/">linkedin.com/company/provide-commerce</a></p>';
+			$block['content'] .= '<p class="intro">Twitter</p>';
+			$block['content'] .= '<p class="sociallink"><a href="http://www.twitter.com/ProvideCommerce/">twitter.com/ProvideCommerce</a></p>';
+			$block['content'] .= '</div>';
+			//$block['content'] .= '<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/ProvideCommerce" data-widget-id="491102107932454912">Tweets by @ProvideCommerce</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
+			$block['content'] .= '</div>';
+        	break;
+        case 'benefits-block':
+	        $block['subject'] = '';
+	        $block['content'] = '<h2>Benefits</h2>';
+	        $block['content'] .= '<ul>';
+			$block['content'] .= '<li><span class="subhead">Health Care:</span>We offer a number of comprehensive options for medical, dental and vision coverage including a Health Savings Account (HSA).</li>';
+			$block['content'] .= '<li><span class="subhead">Flexible Spending Accounts:</span>Use your tax-free dollars to pay for eligible healthcare and/or dependent expenses.</li>';
+			$block['content'] .= '<li><span class="subhead">401k:</span>Plan for your future with a discretionary match of $0.50 on the dollar up to 6% of eligible compensation.</li>';
+			$block['content'] .= '<li><span class="subhead">PTO:</span>Enjoy 17 days/year for your first 2 years. Your PTO is then bumped up to 22 days/year on your 2nd anniversary!</li>';
+			$block['content'] .= '<li><span class="subhead">Holidays:</span>We celebrate 8 company holidays per year.</li>';
+			$block['content'] .= '<li><span class="subhead">Wellness:</span>The health and wellness of our employees is important to us, so we deliver a variety of wellness programs throughout the year such as speakers, Weight Watchers and other wellness initiatives.</li>';
+			$block['content'] .= '<li><span class="subhead">Other Benefits:</span></li>';
+			$block['content'] .= '<li>Life and Accidental Death and Dismemberment Insurance</li>';
+			$block['content'] .= '<li>Short and Long Term Disability Insurance</li>';
+			$block['content'] .= '<li>Gym Membership Assistance</li>';
+			$block['content'] .= '<li>Designated Expectant Mother Parking Spots</li>';
+			$block['content'] .= '<li>Wellness/Mother&rsquo;s Rooms</li>';
+			$block['content'] .= '<li>Relocation Assistance available for several of our open positions</li>';
+			$block['content'] .= '</ul>';
+	       break;
+		case 'what-we-stand-for-block':
+			$block['subject'] = '';
+			$block['content'] = '<div class="image"><img src="/sites/all/themes/provide/includes/images/global/sidebar-what_we_stand_for.jpg" /></div>';
+			$block['content'] .= '<div class="copy">';
+			$block['content'] .= '<h2>Together We Get To WOW</h2>';
+			$block['content'] .= '<p>Our mission, vision and values provide a strong model that enables Provide Commerce to consistently WOW our customers&mdash;and our employees. To do that, we are constantly evolving and adapting everything from products and policies to practices and performance. It takes every member of the team to provide gift-givers and recipients with a rich customer experience...something we value tremendously and perpetuate internally as well.</p>';
+			$block['content'] .= '</div>';
+			break;
+		case 'media-block':
+	        $block['subject'] = '';
+	        $block['content'] = '<div class="media-requests">';
+			$block['content'] .= '<h3>Media Requests</h3>';
+			$block['content'] .= '<p>For press inquiries please email <a href="mailto:pr@redenvelope.com">pr@redenvelope.com</a>.</p>';
+			$block['content'] .= '</div>';
+			$block['content'] .= '<div class="blogging-requets">';
+			$block['content'] .= '<h3>Guest Blogging</h3>';
+			$block['content'] .= '<p>To review our products on your site / blog, please email <a href="mailto:bloggers@providecommerce.com">bloggers@providecommerce.com</a>.</p>';
+			$block['content'] .= '<p>For all other inquiries please use the contact form.</p>';
+			$block['content'] .= '</div>';
+	       break;
+	    case 'giving-back-block':
+	        $block['subject'] = '';
+	        $block['content'] = '<h2>Have a charity you&rsquo;d like<br />us to support?</h2>';
+	        $block['content'] .= '<p><a href="/about-us/giving-back/donation-form">Submit a donation request</a>.</p>';
+	        $block['content'] .= '<p>Please note we require a 60-day lead time on all requests.</p>';
+	       break;
+	    case 'giving-back-form-block':
+	        $block['subject'] = '';
+	        $block['content'] = '<p><span class="blockletter">We appreciate you taking the time to let us know about the causes that are close to your heart.</span> We will carefully evaluate your request and let you know our decision as soon as we can!</p>';
+	       break;
+        case 'promo-life-at-provide':
+	        $block['subject'] = '';
+	        $block['content'] = promo_block(24);
+	       break;
+		case 'promo-our-brands':
+	        $block['subject'] = '';
+	        $block['content'] = promo_block(502);
+	       break;
+	    case 'promo-our-values':
+	        $block['subject'] = '';
+	        $block['content'] = promo_block(504);
+	       break;
+	    case 'promo-our-people':
+	        $block['subject'] = '';
+	        $block['content'] = promo_block(503);
+	       break;
+	    case 'promo-our-story':
+	        $block['subject'] = '';
+	        $block['content'] = promo_block(327);
+	       break;
+		
+		case 'promo-job-alerts':
+	        $block['subject'] = '';
+	        $block['content'] = promo_block(1035);
+	       break;
+	       
+		case 'google-map':
+	        $block['subject'] = '';
+	        $block['content'] = '<iframe width="310" height="290" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Provide+Commerce&amp;aq=&amp;sll=37.269174,-119.306607&amp;sspn=13.118819,26.191406&amp;ie=UTF8&amp;hq=Provide+Commerce&amp;hnear=&amp;t=h&amp;ll=32.86863,-117.215881&amp;spn=0.16725,0.322037&amp;z=11&amp;output=embed"></iframe>';
+	       break;
+	    
+	    case 'contact-us-image':
+	        $block['subject'] = '';
+	        $block['content'] = '<img src="/'.drupal_get_path('theme', 'provide').'/includes/images/global/contact-us.jpg" height="290" width="470" />';
+	       break;
+    }
+    return $block;
+}
+
+function promo_block($nid){
+	return node_view(node_load($nid),'teaser');
+}
+
+function weather_forecast(){
+	//api key e2cfd3cc81e503b7
+	$weather_forecast_data = &drupal_static(__FUNCTION__);
+	if (!isset($weather_forecast_data)):
+		if ($cache = cache_get('provide_weather_forecast_data')):
+		  $weather_forecast_data = $cache->data;
+		else:
+			$url = "http://api.wunderground.com/api/e2cfd3cc81e503b7/forecast10day/q/CA/La_Jolla.json";
+			$json = file_get_contents($url);
+			$weather_json = json_decode($json);
+			$forecast = $weather_json->{'forecast'}->{'simpleforecast'}->{'forecastday'};
+			for($i = 0; $i < 5; $i++):
+				$styles = ($i == 4) ? 'style="margin-right:0;"' : '';
+				$day = ($i == 0 ) ? 'today' : strtolower($forecast[$i]->date->weekday_short);
+				$weather_forecast_data .= '<div class="day day'.$i.'" '.$styles.' >';
+				$weather_forecast_data .= '<div class="weekday '.$day.'"></div>';
+				$weather_forecast_data .= '<div class="temps">';
+				$weather_forecast_data .= '<div class="icon"><img src="/'.path_to_theme().'/includes/images/weather/'.$forecast[$i]->icon.'.png" /></div>';
+				$weather_forecast_data .= '<div class="high">high '.$forecast[$i]->high->fahrenheit.'&deg;</div>';
+				$weather_forecast_data .= '<div class="low">low '.$forecast[$i]->low->fahrenheit.'&deg;</div>';
+				$weather_forecast_data .= '</div>';
+				$weather_forecast_data .= '</div>';
+			endfor;
+			cache_set('provide_weather_forecast_data', $weather_forecast_data, 'cache', CACHE_TEMPORARY);
+		endif;
+	endif;
+	return $weather_forecast_data;
+}
+
+function weather_single(){
+	//api key e2cfd3cc81e503b7
+	$weather_single_data = &drupal_static(__FUNCTION__);
+	if (!isset($weather_single_data)):
+		if ($cache = cache_get('provide_weather_single_data')):
+		  $weather_single_data = $cache->data;
+		else:
+			$weather_single_data = '<a href="/our-culture/life-in-san-diego">';
+			$url = "http://api.wunderground.com/api/e2cfd3cc81e503b7/forecast10day/q/CA/La_Jolla.json";
+			$json = file_get_contents($url);
+			$weather_json = json_decode($json);
+			$forecast = $weather_json->{'forecast'}->{'simpleforecast'}->{'forecastday'};
+			for($i = 0; $i < 1; $i++):
+				$styles = ($i == 4) ? 'style="margin-right:0;"' : '';
+				$day = ($i == 0 ) ? 'today' : strtolower($forecast[$i]->date->weekday_short);
+				$weather_single_data .= '<div class="day day'.$i.'" '.$styles.' >';
+				$weather_single_data .= '<div class="weekday '.$day.'"></div>';
+				$weather_single_data .= '<div class="temps">';
+				$weather_single_data .= '<div class="icon"><img src="/'.path_to_theme().'/includes/images/weather/'.$forecast[$i]->icon.'.png" /></div>';
+				$weather_single_data .= '<div class="high">high '.$forecast[$i]->high->fahrenheit.'&deg;</div>';
+				$weather_single_data .= '<div class="low">low '.$forecast[$i]->low->fahrenheit.'&deg;</div>';
+				$weather_single_data .= '</div>';
+				$weather_single_data .= '</div>';
+			endfor;
+			$weather_single_data .= '</a>';
+			cache_set('provide_weather_single_data', $weather_single_data, 'cache', CACHE_TEMPORARY);
+		endif;
+	endif;
+	return $weather_single_data;
+}
+	
+	
+function contact_us(){
+	drupal_add_js(libraries_get_path('jquery.isotope') . '/jquery.isotope.min.js');
+	$html = "<p class='description'>If you would like to connect with us, contact the Provide Commerce team below.</p>";
+	$html .= drupal_render(drupal_get_form('provide_blocks_contact_form'));
+	$html .= "<div class='contact_content'></div>";
+	return $html;
+}
+
+function provide_blocks_contact_form($form, &$form_state) {
+	
+	$departments = array('Make Selection',
+	'Affiliate Program',
+	'Bloggers',
+	'Business Gifting & Services',
+	'Customer Service',
+	'Donations',
+	'Human Resources',
+	'Information Technology',
+	'Marketing',
+	'Merchandising / New Vendor Request',
+	'Public Relations ',
+	);
+	
+	$form['#prefix'] = '<div id="contact-form-wrapper">';
+	$form['#suffix'] = '</div>';
+	$form['department'] = array(
+		'#title' => t('Who would you like to contact?'),
+		'#type' => 'select',
+		'#options' => $departments,
+	);
+	
+	return $form;
+}
+
+function contact_forms($id){
+	
+	
+	switch($id){
+		case 0:
+		   $text = '';
+		break;
+		case 1:
+		   $text = '<p>If you would like to learn how to generate commission by promoting our brands via your website, click here for more information: <a href="http://www.proflowers.com/Affiliates.aspx">http://www.proflowers.com/Affiliates.aspx</a>.</p>';
+		break;
+		case 2:
+		   $text = '<p>If you are interested in reviewing our products, blogging or other partnerships, please email <a href="mailto:bloggers@providecommerce.com">bloggers@providecommerce.com</a></p>';
+		break;
+		case 3:
+		   $text = '<p>We are your perfect partner for unique gifts, rewards and incentives at direct from the source quality and prices.  With more than 400 items to choose from, nobody makes finding the right business gift easier or a better value than we do.  Click here for more information: <a href="http://www.proflowers.com/corporate.aspx" target="_blank">http://www.proflowers.com/corporate.aspx</a>.</p>';
+		break;
+		case 4:
+		   $text = '<p>We appreciate your feedback. Our goal is to continually improve your experience with our family of brands.  Please let us know what\'s on your mind so we can serve you better: <a href="http://www.proflowers.com/Contactus.aspx" target="_blank">http://www.proflowers.com/Contactus.aspx</a></p>';
+		break;
+		case 5:
+		   // $text = '<p>For all charitable donation requests, please email <a href="donations@providecommerce.com" target="_blank">donations@providecommerce.com</a>.  Include all pertinent information about your event and what items you are requesting in your email. Please note we require a minimum of 60-day lead time for all requests.</p>';
+		   $text = "<a href='/about-us/giving-back'>Donation Application</a>";
+		break;
+		case 6:
+		   $text = '';
+		   $block = block_load('webform', 'client-block-224');
+	       $block_content = _block_render_blocks(array($block));
+		   $build = _block_get_renderable_array($block_content);
+		   $text .= drupal_render($build);
+		   
+		break;
+		case 7:
+		   $text = '';
+			$block = block_load('webform', 'client-block-288');
+		       $block_content = _block_render_blocks(array($block));
+			   $build = _block_get_renderable_array($block_content);
+			   $text .= drupal_render($build);
+		break;
+		case 8:
+		   $text = '';
+		   $block = block_load('webform', 'client-block-289');
+	       $block_content = _block_render_blocks(array($block));
+		   $build = _block_get_renderable_array($block_content);
+		   $text .= drupal_render($build);
+		break;
+		case 9:
+		    $text = '';
+			$block = block_load('webform', 'client-block-290');
+		       $block_content = _block_render_blocks(array($block));
+			   $build = _block_get_renderable_array($block_content);
+			   $text .= drupal_render($build);
+		break;
+		case 10:
+		   $text = '<p>For press materials and media inquiries, please email: <a href="mailto:pr@redenvelope.com">pr@redenvelope.com</a> or call 858-638-4648.</p>';
+		break;
+		
+	}
+	
+	print $text;
+	
+}
+	
+	
+	
+
+
+

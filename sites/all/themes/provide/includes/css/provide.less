@@ -1,0 +1,1064 @@
+
+/* Color Pallete */
+@white:#FFFFFF; 
+@blue:#009DDC;
+@forest:#357259;
+@gold:#BBBC39;
+@grey:#999999;
+@orange:#FF8000;
+@purple:#8A4E77;
+@seafoam:#68DDAB;
+@slate:#545F68;
+@teal:#56B2BD;
+
+@providegrey:#818385;
+
+@alphawhite:rgba(255,255,255,0.85); 
+@alphablue:rgba(0,157,220,0.85);
+@alphaforest:rgba(53,114,89,0.85);
+@alphagold:rgba(187,188,57,0.85);
+@alphagrey:rgba(153,153,153,0.85);
+@alphaorange:rgba(255,128,0,0.85);
+@alphapurple:rgba(138,78,139,0.85);
+@alphaseafoam:rgba(104,221,171,0.85);
+@alphaslate:rgba(84,95,104,0.85);
+@alphateal:rgba(81,165,177,0.85);
+
+@darkgold:#5f611e;
+@darkgrey:#2a3136;
+@darkorange:#814200;
+@darkpurple:#46283E;
+@darkseafoam:#357259;
+@darkteal:#2c5b63;
+@darkblue:#005173;
+
+@font10:10px;
+@font11:11px;
+@font12:12px;
+@font13:13px;
+@font14:14px;
+@font16:16px;
+@font17:17px;
+@font18:18px;
+@font20:20px;
+@font22:22px;
+@font31:31px;
+@font32:32px;
+
+
+
+/* Additional Typography */
+html, body { color:@slate; font-family:"Museo Slab"; font-size:@font14; font-weight:300; letter-spacing:0.03em; line-height:24px; }
+p, li { color:@slate; font-family:"Intro Book"; font-size:@font14; font-weight:300; letter-spacing:0.03em; line-height:24px; margin-bottom:10px; }
+a { color:@blue; text-decoration:none; }
+a:hover { color:@darkblue; }
+.blockletter { font-family:"Intro Book Italic"; font-size:@font18; }
+
+p, li {
+	b, strong { font-family:"Intro Bold"; font-weight:normal; }
+}
+
+.subhead { clear:left; color:@purple; display:block; font-family:'Intro Book Italic'; }
+.section-join-our-team #sidebar-right .subhead { color:@darkorange; }
+
+.node ul { padding-left:20px; 
+	 li { background:url('../images/global/background-teal_bullet.png') 0 4px no-repeat; margin-bottom:8px; padding-left:20px; }
+}
+
+#help { color:black; font-family:'Intro Book'; font-size:@font12; }
+
+#site-wrap { background:url('../images/global/background-site.png') repeat-x center 215px @white; position:relative; height:auto !important; height:100%; padding-bottom:100px; width:100%; min-height:100%; }
+
+/*
+ * Structure 
+ *
+ */
+
+#header-wrap, #page-wrap, #content-wrap, #footer-wrap { position:relative; }
+
+#content.grid_10 { width:800px; margin:0;  }
+#content.grid_12 { width:960px; margin:0;}
+
+
+
+/*
+ * Header & Navigation
+ * 
+ */
+#header-wrap { position:relative; width:100%;
+	#header { height:120px;
+		#logo { float:left; height:30px; padding:49px 0 41px; width:310px; } 
+		#block-menu-block-1 { float:right;
+            ul.menu { list-style:none; margin:0; padding:56px 0 0;
+                
+                /*
+                *     Modified header 1-10-13
+                */
+                li { float:left; font-family:"Museo Slab 500"; font-size:@font14; list-style:none; margin:0 10px 0 0; padding:0; position:relative; z-index: 10;
+                    a { color:@grey; padding:0 10px 0 5px; text-decoration:none; text-transform:lowercase; }
+                    a:hover { color:inherit; }
+                    a.active-trail { color:inherit; }
+                    
+                    ul.menu{
+                        padding:0;
+                        
+                        background:#fff;
+                        background:rgba(255,255,255,1);
+                        list-style:none;
+                        position:absolute;
+                        left:-9999px;
+                        
+                        -webkit-box-shadow: 0px 7px 10px 0px rgba(50, 50, 50, 0.29);
+                        -moz-box-shadow:    0px 7px 10px 0px rgba(50, 50, 50, 0.29);
+                        box-shadow:         0px 7px 10px 0px rgba(50, 50, 50, 0.29);
+                        
+                        a{
+                           white-space:nowrap;
+                           display: block;
+                           width:100%;
+                           padding: 2px 20px 4px 20px;
+                        }
+                        
+                        li:first-child a{
+                            padding-top: 8px;
+                        }
+                        
+                        li:last-child a{
+                            padding-bottom: 8px;
+                        }
+                        /*
+
+                        
+                        li {
+                            a { color:@grey; }
+                        }
+                        
+                        li.active:hover {
+                            a { color:inherit; }
+                        }
+                        */
+                        
+    
+                        li{
+                            float:none;
+                            margin: 0;
+                            padding: 0;
+                            
+                            span{
+                                display: none
+                            }
+                            
+                        }
+                    }               
+                }
+                
+                li:hover ul{ /* Display the dropdown on hover */
+                    left:-9px;
+                }
+                li:hover a{
+                    text-decoration:none;
+                }
+                li:hover ul a{ 
+                    text-decoration:none;
+                }
+                li:hover ul li:hover{ 
+                    color:inherit;
+                }
+                
+                /*
+                    li.active {
+                    a { color:inherit; }
+                }
+                */
+                
+                li.menu-about-us        { color:@teal; 
+                    li:hover{ color:@teal;}
+                }
+                li.menu-contact-us      { color:@gold; 
+                    li:hover{ color:@gold;}
+                 }
+                li.menu-join-our-team   { color:@orange; 
+                    li:hover{ color:@orange;}
+                 }
+                li.menu-our-brands      { color:@purple; 
+                    li:hover{ color:@purple;}
+                    ul.menu{display: none;}
+                 }
+                li.menu-our-culture     { color:@seafoam; 
+                    li:hover{ color:@seafoam;}
+                 }
+
+                /*
+                *     Modified header 1-10-13 end
+                */
+			}
+		}
+	}
+}
+
+#site-wrap.section-about-us ul.menu li { color:@teal; }
+#site-wrap.section-contact-us ul.menu li { color:@gold; }
+#site-wrap.section-join-our-team ul.menu li { color:@orange; }
+#site-wrap.section-our-brands ul.menu li { color:@purple; }
+#site-wrap.section-our-culture ul.menu li { color:@seafoam; }
+
+#content-top { height:140px; margin:0 5px 10px; width:950px; overflow:hidden; position:relative;
+	.header-wow-image { float:right; }
+}
+
+
+/*
+ * Sub Menus
+ * 
+ */
+#page-wrap {
+	#content-wrap {
+		#sidebar-left { position:relative;
+			ul.menu { list-style:none; margin:0; padding:0;
+				li { font-family:"Museo Slab 500"; font-size:@font14; list-style:none; margin:0 0 20px; padding:0;
+					a { color:@grey; text-decoration:none; text-transform:lowercase; }
+					a:hover { color:inherit; }
+				}
+				li.active {
+					a { color:inherit; }
+				}
+			}
+			.parent-mlid-534 {
+				ul.menu li a { text-transform:none; }
+			}
+			
+		}
+	}
+} 
+
+/*
+ * Isotope Specific
+ * 
+ */
+
+#page-wrap { padding-bottom:160px; position:relative; width:100%;
+	#content-wrap { 
+		
+		#isotope-container { margin-top:-5px; }
+		#block-views-our-brands-our-brands { margin-top:-5px; }
+		
+		/* Isotope Dimensions */
+		.isotope-element { margin:5px; 
+			.node { height:100%; overflow:hidden; width:100%; }
+		}
+		
+		.grid-2x2	{ height:140px; width:150px; }
+		.grid-2x4	{ height:290px; width:150px; }
+		.grid-2x6	{ height:440px; width:150px; }
+		.grid-4x2	{ height:140px; width:310px; }
+		.grid-4x4	{ height:290px; width:310px; }
+		.grid-4x6	{ height:440px; width:310px; }
+		.grid-6x2	{ height:140px; width:470px; }
+		.grid-6x4	{ height:290px; width:470px; }
+		.grid-6x6	{ height:440px; width:470px; }
+		.grid-8x2	{ height:140px; width:630px; }
+		.grid-8x4	{ height:290px; width:630px; }
+		.grid-8x6 	{ height:440px; width:630px; }
+		.grid-8x8 	{ height:590px; width:630px; }
+		.grid-10x2	{ height:140px; width:780px; }
+		.grid-10x4	{ height:290px; width:780px; }
+		.grid-10x6	{ height:440px; width:780px; }
+
+		/*
+		 * Colors
+		 */
+		.background-gold	{ background-color:@gold; }
+		.background-orange	{ background-color:@orange; }
+		.background-purple	{ background-color:@purple; }
+		.background-seafoam { background-color:@seafoam; }
+		.background-slate	{ background-color:@slate; }
+		.background-teal	{ background-color:@teal; }
+		
+		.background-gold.alpha		{ background-color:@alphagold; }
+		.background-orange.alpha	{ background-color:@alphaorange; }
+		.background-purple.alpha	{ background-color:@alphapurple; }
+		.background-seafoam.alpha	{ background-color:@alphaseafoam; }
+		.background-slate.alpha		{ background-color:@alphaslate; }
+		.background-teal.alpha		{ background-color:@alphateal; }
+		
+		.background-gold.dark		{ background-color:@darkgold; }
+		.background-orange.dark		{ background-color:@darkorange; }
+		.background-purple.dark		{ background-color:@darkpurple; }
+		.background-seafoam.dark	{ background-color:@darkseafoam; }
+		.background-slate.dark		{ background-color:@darkslate; }
+		.background-teal.dark		{ background-color:@darkteal; }
+				
+		
+		/*
+		 * Events
+		 */
+		.expand	{ bottom:0px; cursor:pointer; height:100%; left:0; overflow:hidden; position:absolute; width:100%; z-index:3; }
+		.link	{ bottom:0px; height:100%; left:0; overflow:hidden; position:absolute; width:100%; z-index:3; }
+		a.link { cursor:pointer; }
+		.expand:hover, a.link:hover {
+			.background-gold 	{ .label { color:@darkgold; } .button { background-position:-60px -30px; } }
+			.background-slate	{ .label { color:@darkgrey; } .button { background-position:-150px -30px; } }
+			.background-orange	{ .label { color:@darkorange; } .button { background-position:-90px -30px; } }
+			.background-purple	{ .label { color:@darkpurple; } .button { background-position:-120px -30px; } }
+			.background-seafoam	{ .label { color:@darkseafoam; } .button { background-position:-30px -30px; } }
+			.background-teal	{ .label { color:@darkteal; } .button { background-position:-180px -30px; } }	
+		}
+		a.link:hover {
+			.background-gold 	{ .button { background-position:-60px 0; } }
+			.background-slate	{ .button { background-position:-150px 0; } }
+			.background-orange	{ .button { background-position:-90px 0; } }
+			.background-purple	{ .button { background-position:-120px 0; } }
+			.background-seafoam	{ .button { background-position:-30px 0; } }
+			.background-teal	{ .button { background-position:-180px 0; } }
+		}
+		
+		/*
+		 * Structural
+		 */
+		.expand .preview { bottom:0px; height:50px; left:0; overflow:hidden; position:absolute; width:100%; z-index:3; 
+			.button { background:url('../images/global/controls-expand_link_sprite.png') 0 -30px no-repeat; display:block; height:30px; overflow:hidden; bottom:0; right:0; position:absolute; width:30px; }
+			.label	{ color:@white; clear:left; float:left; font-size:@font31; height:31px; line-height:31px; padding:11px 15px 8px; text-transform:lowercase; }
+		}
+		
+		.link .preview { bottom:0px; height:50px; left:0; overflow:hidden; position:absolute; width:100%; z-index:3; 
+			.button { background:url('../images/global/controls-expand_link_sprite.png') 0 0 no-repeat; display:block; height:30px; overflow:hidden; bottom:10px; right:10px; position:absolute; width:30px; }
+			.label	{ color:@white; clear:left; float:left; font-size:@font31; height:31px; line-height:31px; padding:11px 15px 8px; text-transform:lowercase; }
+		}
+		.link .preview.grid-2x2 { height:100%; width:100%; }
+		div.link { .button { display:none; } }
+		 
+		.caption { bottom:0px; height:115px; left:0; overflow:hidden; position:absolute; width:100%; z-index:3; 
+			.button { background:url('../images/global/controls-expand_link_sprite.png') 0 0 no-repeat; display:block; height:30px; overflow:hidden; bottom:10px; right:10px; position:absolute; width:30px; }
+			.label	{ color:@white; clear:left; float:left; font-size:@font31; height:31px; line-height:31px; padding:15px 15px 5px; text-transform:lowercase; }
+			.copy	{ color:@white; clear:left; float:left; font-size:@font18; height:37px; line-height:24px; overflow:hidden; padding:0 15px 8px 15px;  }
+			.copy p { color:@white; font-family:"Museo Slab"; font-size:@font18; line-height:24px;  }
+		}
+		
+		
+		
+		/*
+		 * Slideshows
+		 */
+		.slideshow { display:none; opacity:0; overflow:hidden; position:absolute; z-index:2;  
+			.slideshow-header { clear:left; display:block; float:left; height:35px; overflow:hidden; position:relative; width:630px; 
+				.close { background:url('../images/global/button-close_white.png') top left no-repeat; cursor:pointer; height:24px; position:absolute; right:10px; top:1px; width:25px; }
+			}
+			.slideshow-container { clear:left; display:block; float:left; height:440px; overflow:hidden; position:relative; width:630px; 
+				.controls-previous { background:url('../images/global/controls-left_arrow.png') 11px center no-repeat rgba(255,255,255,.8); border-radius:20px; height:40px; left:272px; position:absolute; bottom:20px; z-index:1001; width:40px; -moz-box-shadow: 0 0 4px #818385; -webkit-box-shadow: 0 0 4px #818385; box-shadow: 0 0 4px #818385; }
+				.controls-previous:hover { background-color:rgba(255,255,255,.6); }
+				.controls-next { background:url('../images/global/controls-right_arrow.png') 17px center no-repeat rgba(255,255,255,.8); border-radius:20px; height:40px; left:328px; position:absolute; bottom:20px; z-index:1001; width:40px; -moz-box-shadow: 0 0 4px #818385; -webkit-box-shadow: 0 0 4px #818385; box-shadow: 0 0 4px #818385; }
+				.controls-next:hover { background-color:rgba(255,255,255,.6); }
+				.slideshow-window { height:440px; overflow:hidden; position:relative; width:630px;
+					.slideshow-panels { position:relative;
+						.slide { height:440px; overflow:hidden; text-align:center; width:640px; }
+					}
+				}
+			}
+			.link { height:115px; bottom:0; }
+		}
+		
+		/*
+		 * Video
+		 */
+		.video { display:none; opacity:0; overflow:hidden; position:absolute; z-index:2;  
+			.video-header { clear:left; display:block; float:left; height:35px; overflow:hidden; position:relative; width:630px; 
+				.close { background:url('../images/global/button-close_white.png') top left no-repeat; cursor:pointer; height:24px; position:absolute; right:10px; top:1px; width:25px; }
+			}
+			.video-container { clear:left; display:block; float:left; height:440px; overflow:hidden; position:relative; width:630px; }
+			.link { height:115px; bottom:0; }
+		}
+			
+		/*
+		 * People
+		 */
+		.people {
+			.person-image { float:left; height:140px; margin-bottom:10px; width:150px; }
+			
+			.preview { background:@forest; float:left; padding:20px 15px; height:100px; width:120px;
+				h3 { color:@seafoam; font-size:@font17; line-height:22px; margin-bottom:5px; }
+				.job-title { clear:left; color:@white; font-size:@font12; line-height:14px; }
+			}
+			.expand:hover {
+				h3 { color:@white; }
+				.button { background-position:-30px -30px; }
+			}
+			
+		
+			
+			.bio { background:@forest; clear:left; display:none; float:left; position:relative; width:470px;
+				.close { background:url('../images/global/button-close_white.png') top left no-repeat; cursor:pointer; height:24px; position:absolute; right:10px; top:-34px; width:25px; }
+				.content { background:@white; margin:10px 0 0 10px; height:100%; padding:20px 10px 0 10px; width:440px; 
+					h3 { color:@seafoam; font-size:@font22; line-height:25px;  }
+					.linkedin { background:url('../images/global/icon-linked-in-sprite.png') 0 0 no-repeat; display:block; overflow:hidden; position:absolute; top:30px; right:20px; height:32px; width:32px; }
+					.linkedin:hover { background-position:-32px 0; }
+					.job-title { clear:left; color:@seafoam; font-size:@font16; line-height:19px; margin-bottom:10px; }
+					.full-bio { font-family:"Intro Book"; color:@slate; }
+					.blockletter { font-family:"Intro Book Italic"; font-size:@font18; }
+				}
+			}
+		}  
+						
+		.promo { position:relative;
+			.node { height:100%; overflow:hidden; width:100%;
+				.preview-link { bottom:0; cursor:pointer; height:50px; left:0; position:absolute; width:100%; 
+					.label 	{ color:@white; float:left; font-size:@font31; height:31px; line-height:31px; padding:11px 15px 8px; text-transform:lowercase; }
+					.button { background:url('../images/global/controls-expand_link_sprite.png') 0 0 no-repeat; display:block; height:30px; overflow:hidden; top:11px; right:15px; position:absolute; width:30px; }
+				}
+			}
+		}
+		
+		.node-promos, .promo.grid-2x2 {
+			.preview { background-position:0 0; background-repeat:no-repeat;
+				.button { right:11px; }
+			}
+			.preview:hover { background-position:-150px 0; }
+		}
+		
+		
+		
+		
+		.quote { position:relative;
+			.node { height:100%; overflow:hidden; width:100%;
+				.image, .image.left { float:left; height:140px; padding-right:10px; overflow:hidden; width:150px; }
+				.image.right { float:right; padding-left:10px; padding-right:0; }
+				.text { font-family:"Museo Slab 500"; font-size:@font20; height:140px; line-height:24px; padding:0 10px; display:table-cell; vertical-align:middle;
+					.quote { font-family:"Georgia"; }
+					.attribution { clear:left; float:left; font-size:@font14; margin-top:5px; }
+				}
+				.text.right { text-align:right; 
+					.attribution { float:right; }
+				}
+				.text.white		{ color:@white; }
+				.text.blue		{ color:@blue; }
+				.text.forest	{ color:@forest; };
+				.text.gold		{ color:@gold; }
+				.text.grey		{ color:@grey; }
+				.text.orange	{ color:@orange; }
+				.text.purple	{ color:@purple; }
+				.text.seafoam	{ color:@seafoam; }
+				.text.slate		{ color:@slate; }
+				.text.teal		{ color:@teal; }
+			}
+		}
+		.quote.grid-2x4, .quote.grid-4x4, .quote.grid-6x4, .quote.grid-8x4, .quote.grid-10x4 {
+			.node .text { height:290px; }
+		}
+		.quote.grid-2x6, .quote.grid-4x6, .quote.grid-6x6, .quote.grid-8x6, .quote.grid-10x6 {
+			.node .text { height:440px; }
+		}
+		
+		.department.grid-2x2 { position:relative;
+			.node { background:@white; height:100%; overflow:hidden; width:100%;
+				.preview-info { background:#FFAC59; clear:left; cursor:pointer; float:left; height:100px; overflow:hidden; padding:20px 15px; width:120px;
+					.button { background:url('../images/global/controls-expand_link_sprite.png') 0 -30px no-repeat; display:block; height:30px; overflow:hidden; bottom:0; right:0; position:absolute; width:30px; }
+					h3 { color:@white; font-size:@font17; line-height:22px; }
+				}
+				.preview-info:hover {
+					.button { background-position:-90px -30px;}
+					h3 { color:@darkorange; }
+				}
+				.preview-info.orange { background-color:@orange; }
+				.full-info { background:@darkorange; clear:left; display:none; float:left; margin-top:10px; position:relative; width:470px;
+					.close { background:url('../images/global/button-close_white.png') top left no-repeat; cursor:pointer; height:24px; position:absolute; right:10px; top:-34px; width:25px; }
+					.content { background:@white; margin:10px 0 0 10px; height:100%; padding:20px 10px 20px 10px; width:440px; 
+						h3 { color:@purple; font-size:@font22; line-height:25px; margin-bottom:30px;  }
+						.copy { font-family:"Intro Book"; color:@slate; 
+							.blockletter { font-family:"Intro Book Italic"; font-size:@font18; }
+						}
+					}
+				}
+			}
+		}
+		
+		.grid-2x2 {
+			.node { height:100%; width:100%;
+				.preview-link { background:rgba(81,165,177,0.85); top:0; height:100%; left:0; position:absolute; width:100%; 
+					.label { display:none; }
+				}
+			}
+		}
+		
+		.wow {
+			.node { height:100%; width:100%; overflow:hidden; }
+		}
+		
+		.weather-today, .weather-forecast { position:relative;
+			.day { background:blue; float:left; height:140px; margin-right:10px; overflow:hidden; position:relative; width:150px;  
+				.weekday { background:url('../images/weather/daily_forecast_label_sprite.png'); height:140px; overflow:hidden; position:absolute; width:150px; }
+				@weekdayposition:-160px;
+				.weekday.today { background-position:0 0; }
+				.weekday.mon { background-position:@weekdayposition 0; }
+				.weekday.tue { background-position:@weekdayposition * 2 0; }
+				.weekday.wed { background-position:@weekdayposition * 3 0; }
+				.weekday.thu { background-position:@weekdayposition * 4 0; }
+				.weekday.fri { background-position:@weekdayposition * 5 0; }
+				.weekday.sat { background-position:@weekdayposition * 6 0; }
+				.weekday.sun { background-position:@weekdayposition * 7 0; }
+				
+				.temps { background:rgba(102,111,126,0.8); bottom:0; font-size:15px; height:48px; position:absolute;width:150px;
+					-ms-filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#CC666F7E,endColorstr=#CC666F7E);
+					filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#CC666F7E,endColorstr=#CC666F7E);
+					zoom: 1;
+					.icon { float:left; padding:5px 5px 5px 20px; }
+					.high { color:@white; position:absolute; right:10px; top:5px; }
+					.low { color:@white; position:absolute; right:10px; top:24px; }
+				}
+			}
+			.day0 { background:url('../images/weather/place_1.jpg'); }
+			.day1 { background:url('../images/weather/place_2.jpg'); }
+			.day2 { background:url('../images/weather/place_3.jpg'); }
+			.day3 { background:url('../images/weather/place_4.jpg'); }
+			.day4 { background:url('../images/weather/place_5.jpg'); }
+			/*.node { background:url('../images/global/background-weather_widget.jpg') top left no-repeat; height:100%; overflow:hidden; width:100%;
+				.content { height:100%; width:100%;
+					#block-provide-blocks-weather-block { height:100%; width:100%;
+						.weather { height:100%; width:100%;
+							.icon { bottom:5px; position:absolute; left:30px; width:38px; height:38px; overflow:hidden; }
+							.temp { bottom:0; color:@white; font-size:36px; line-height:40px; position:absolute; right:5px; }
+						}
+					}
+				}
+			}*/
+		}
+		.weather-today { height:140px; width:150px; 
+			.day {   
+				@weekdayposition:-160px;
+				.weekday.today { background-position:@weekdayposition * 8 0; }
+			}
+		}
+		.weather-forecast { height:140px; width:790px; }
+		
+		.timeline-block { background:@white; width:310px; height:890px; margin:5px; }
+		
+		.article { /*height:290px; width:310px;*/
+			.node { height:100%; overflow:hidden; width:100%;
+				.spacer { background:@forest; display:block; clear:left; height:10px; width:100%; }
+				.spacer.blue { background:@blue ; }
+				.spacer.forest { background:@forest; }
+				.spacer.gold { background:@gold ; }
+				.spacer.grey { background:@grey; }
+				.spacer.orange { background:@orange; }
+				.spacer.purple { background:@purple; }
+				.spacer.seafoam { background:@seafoam; }
+				.spacer.slate { background:@slate; }
+				.spacer.teal { background:@teal; }
+				.article-info { color:@slate; font-family:"Intro Book"; font-size:@font14; height:220px; line-height:24px; padding:30px; }
+			}
+		}
+		.article.six_two { height:140px; width:470px;
+			.article-info { font-size:@font14; height:70px; line-height:24px; overflow:hidden; padding:30px; }
+			.article-image { display:none; }
+		}
+		.article.image { height:440px;
+			.article-image { height:140px; margin-bottom:10px; overflow:hidden; }
+		}
+		
+		
+		.blurb {
+			.node { height:100%; overflow:hidden; width:100%;
+				h1 { color:@white; font-family:"Museo Slab 500"; font-size:@font22; margin-bottom:15px;  }
+				.image, .image.left { float:left; height:100%; padding-right:10px; overflow:hidden; }
+				.image.right { float:right; padding-left:10px; padding-right:0; }
+				.blurb-copy { font-family:"Museo Slab 500"; font-size:@font20; height:440px; line-height:24px; display:table-cell;  }
+				.spacer { background:@forest; display:block; height:10px; width:100%; }
+				.spacer.blue { background:@darkblue ; }
+				.spacer.forest { background:@forest; }
+				.spacer.gold { background:@darkgold ; }
+				.spacer.grey { background:@darkgrey; }
+				.spacer.orange { background:@darkorange; }
+				.spacer.purple { background:@darkpurple; }
+				.spacer.seafoam { background:@seafoam; }
+				.spacer.slate { background:@darkslate; }
+				.spacer.teal { background:@darkteal; }
+				.text { color:@slate; font-family:"Intro Book"; font-size:@font14; line-height:24px; padding:30px; }
+				
+				.blurb-copy.white {
+					.text, .text p { color:@white; }
+					a { color:@white; }
+				}
+				
+				.blurb-copy.background-seafoam { background-color:@darkseafoam; }
+				.image.background-seafoam.dark { background-color:@seafoam; }
+			}
+			
+			
+		}
+		
+		
+		.our-values{ height:740px; width:470px;
+			.node { height:100%; overflow:hidden; width:100%;
+				.spacer { background:@teal; display:block; clear:left; height:10px; width:100%; }
+				.body { color:@slate; font-family:"Intro Book"; font-size:@font14; height:220px; line-height:24px; padding:30px;
+					.blockletter { font-family:"Intro Book Italic"; font-size:@font18; }
+					li { background:url('../images/global/background-teal_smaller_bullet.png') 0 6px no-repeat; margin-bottom:8px; padding-left:15px; }
+				}
+			}
+		}
+		
+	}
+}
+
+/*
+ * Isotope IE8 Fixes */
+ 
+.ie8 #page-wrap #content-wrap .slideshow .slideshow-container {
+	.controls-previous { background:url('../images/global/controls-left_arrow.png') 11px center no-repeat rgb(255,255,255); height:40px; left:272px; position:absolute; bottom:20px; z-index:1001; width:40px; }
+	.controls-next { background:url('../images/global/controls-right_arrow.png') 17px center no-repeat rgb(255,255,255); height:40px; left:328px; position:absolute; bottom:20px; z-index:1001; width:40px; }
+} 
+
+.ie8 #page-wrap #content-wrap .quote .node .text { font-size:@font18; }
+
+
+/*
+ * Our Brands
+ *
+ */
+ 
+#block-views-our-brands-our-brands { clear:left; display:block; float:left; 
+	.brand { clear:left; display:block; float:left; height:290px; margin:5px; width:630px; 
+		.brand-image { float:left; margin-right:10px; }
+		.brand-info { background:@white; border-top:10px solid #773863; font-family:"Intro Book"; font-size:@font14; float:left; height:220px; line-height:24px; padding:30px; position:relative; width:250px; 
+			.blockletter { font-family:"Intro Book Italic"; font-size:@font18; }
+			.brand-link { bottom:30px; color:grey; display:block; font-size:@font16; height:16px; position:absolute; padding:16px 59px 16px 0; right:30px;
+				.button { background:url('../images/global/controls-brand_link_sprite.png') 0 0 no-repeat; display:block; height:48px; width:49px; position:absolute; top:0; right:0; }
+			}
+			.brand-link:hover { color:@darkpurple;
+				.button { background-position:-49px 0; }
+			}
+		}
+		.brand-info.purple { background:@purple; color:@white;
+			.brand-link { color:@white;
+				.button { background-position:0 -48px; }
+			}
+			
+			.brand-link:hover { color:@darkpurple;
+				.button { background-position:-49px -48px; }
+			}
+			p { color:@white; }
+		}
+
+	}
+	.brand.views-row-1 { margin-left:165px; }
+	.brand.views-row-2 {  }
+	.brand.views-row-3 { margin-left:5; 
+		.brand-image { float:right; margin-right:0; margin-left:10px; }
+	}
+	.brand.views-row-4 { margin-left:165px; 
+		.brand-image { float:right; margin-right:0; margin-left:10px; }
+	}
+	.brand.views-row-5 { margin-left:165px; }
+	.brand.views-row-6 {  
+		.brand-image { float:right; margin-right:0; margin-left:10px; }
+	}
+	.brand.views-row-7 { margin-left:165px; }
+} 
+
+/*
+ * Contact Us
+ *
+ * @ Form
+ */
+ 
+#block-provide-blocks-contact-block { border-top:10px solid @darkgold; padding:30px 0 0 20px;
+	p.description { margin-bottom:30px; }
+	.form-item-department { height:50px; position:relative; 
+		label { color:@slate; font-family:'Intro Book Italic'; font-size:@font18; font-weight:normal; margin-bottom:20px; }
+		select { position:absolute; left:0; top:30px; z-index:10; width:280px !important; height:30px !important; line-height:26px; 
+			option { color:@provideblue; display:block; font-family:'Intro Book'; font-size:@font12; height:12px; line-height:13px; overflow:hidden; padding:4px; }
+		}
+		div.select{ background:url('../images/global/form-select_dropdown.png') no-repeat right center @white; border:2px solid #FCA955; top:30px; cursor:default; display:block; float:left; height:14px; left:0; overflow:hidden; padding:10px 20px 7px 8px; position:absolute; width:244px; z-index:1;
+			span { color:@provideblue; display:block; height:14px; overflow:hidden; width:244px; font-family:'Intro Book'; font-size:@font12; line-height:14px; }
+		}
+	}
+	.contact_content { background:#ECEDED; clear:left; color:@slate; display:none; float:left; padding:20px;
+		#webform-component-description { float:left; clear:left; display:block;
+			h2 { clear:left; color:@orange; font-size:@font18; line-height:18px; margin-bottom:20px; }
+			ul { 
+				li { margin-bottom:30px;
+					.question { clear:left; display:block; font-family:'Intro Book Italic'; font-weight:bold;  }
+				}
+			}
+		}
+
+		.form-item-location { top:160px; 
+			select { position:absolute; left:10px; top:25px; }
+			div.select { position:absolute; left:10px; top:25px; }
+		}
+		
+		
+		.form-item { clear:left; display:block; float:left;
+			label { font-family:'Intro Book'; }
+			input.form-text { background:@white; border:2px solid @orange; font-size:@font14; height:14px; line-height:14px; padding:7px; width:230px; }
+			textarea { background:@white; border:2px solid @orange; font-size:@font14; height:100px; line-height:14px; padding:7px; resize:none; width:350px; }
+		}
+		.form-submit { background:url('../images/global/button-submit.png') 0 0 no-repeat; border:none; clear:left; cursor:pointer; float:right; height:30px; overflow:hidden; text-indent:-500px; width:114px; }
+		.form-submit:hover { background-position:-114px 0; }
+	}
+} 
+
+/*
+ * Donations
+ *
+ * @ Form
+ */
+ 
+#provide-donations-form { margin:0 5px;
+	fieldset { clear:left; display:block; margin:20px 0;}
+	legend { clear:left; color:@seafoam; font-size:@font22; line-height:22px; margin:0 0 20px; }
+	.form-item { clear:left; display:block;
+		label { font-family:'Intro Book'; font-weight:normal; }
+		input.form-text { background:@white; border:2px solid #EEEEEE; font-size:@font14; height:14px; line-height:14px; padding:7px; width:230px; }
+		textarea { background:@white; border:2px solid #EEEEEE; font-size:@font14; height:100px; line-height:14px; padding:7px; resize:none; width:390px;  }
+		.description { line-height:18px; padding:10px 0; }
+	}
+	
+	.form-submit { background:url('../images/global/button-submit.png') 0 0 no-repeat; border:none; clear:left; cursor:pointer; float:right; height:30px; overflow:hidden; text-indent:-500px; width:114px; }
+	.form-submit:hover { background-position:-114px 0; }
+	#edit-cash {
+		.form-submit { background:url('../images/global/button-upload.png') 0 0 no-repeat; width:113px; }
+		.form-submit:hover { background-position:-113px 0; }
+	}
+	#edit-gifts {
+		.form-submit { background:url('../images/global/button-add-another-gift.png') 0 0 no-repeat; width:315px; }
+		.form-submit:hover { background-position:-315px 0; }
+	}
+	#edit-product {
+		.form-submit { background:url('../images/global/button-add-another-product.png') 0 0 no-repeat; width:259px; }
+		.form-submit:hover { background-position:-259px 0; }
+	}
+} 
+
+/* In The News */
+
+#block-views-news-block {
+	.views-row { background:rgba(252,252,252,.95); border-top:10px solid @darkteal; margin-bottom:20px; padding:30px;
+		h3 { color:@teal; font-family:'Museo Slab 500'; font-size:@font20; line-height:24px; margin-bottom:10px; width:100%; 
+			a { color:@teal; }
+		}
+	}
+	.views-row-odd { background:rgba(255,255,255,.9); }
+}
+
+#block-provide-blocks-media-block { background:#91CDD4; ; border-top:10px solid @darkteal; color:@white; margin-bottom:10px; padding:30px 20px;
+	.media-requests { margin-bottom:20px; }
+	h3 { color:@darkteal; font-family:'Intro Book'; font-size:@font18; margin-bottom:5px; }
+	p { color:@white; }
+	a { color:@purple; }
+	a:hover { color:@darkteal; }
+}
+
+/*
+ * Our Story
+ *
+ * @ Main Timeline
+ */
+ 
+.page-about-us-our-story #content-wrap #content { position:relative;
+	.region-content { position:relative; }
+}
+
+#block-views-about-us-our-story-jump-menu { border-left:10px solid @teal; float:left; margin:0 5px 0 45px; padding:20px 0 15px 25px; width:70px; 
+	.views-summary { margin-bottom:10px; 
+		a { color:@providegrey; font-family:'Museo Slab'; font-size:@font16; line-height:16px; }
+		a:hover, a.active { color:@teal; }
+	}
+}
+
+#block-views-about-us-our-story { float:left; margin:-39px 5px 0; width:630px; 
+	h3 { border-bottom:10px solid @teal; clear:left; display:block; color:@slate; font-size:@font32; padding-bottom:20px; margin-bottom:20px;
+		a { padding-top:20px; }
+	}
+	.views-row { clear:left; display:block; float:left; margin-bottom:10px;
+		.timeline-image { background:url('../images/global/background-timeline_arrow.png') center center no-repeat; float:left; height:134px; line-height:134px; margin:0 15px 0 10px; text-align:center; vertical-align:middle; width:134px;
+			img {  vertical-align:middle; }
+		}
+		.timeline-info { float:left; /*height:134px;*/ width:470px; 
+			p { display:table-cell; height:134px; vertical-align:middle; }
+		}
+	}
+	.views-row-last { margin-bottom:40px; }
+}
+
+/*
+ * Our Story
+ *
+ * @ Timeline Block
+ */
+
+#timelinePreview { height:880px; width:310px;
+	div { margin: 13px 0; }	
+	#timelineLeftColumn		{ float:left; width:134px; 
+		.year { text-align:right; }
+	}
+
+	#timelineCenterColumn	{ background:@teal; float:left; text-align:center; margin:0 15px; width:11px; height:100%; }
+
+	#timelineRightColumn	{ float:left; width:134px; }
+	
+	.imageLg { height:134px; width:134px; 
+		a .text { display:none; }
+		a:hover .text { color:#545f68; display:block; font-family: 'Museo Slab 500'; font-size:@font13; left:10px; top:0px; }
+	}
+	.imageSm { height:92px; width:134px; }
+	
+	.year { display:block; height:24px; }
+	
+	a { color:@teal; font-family: 'Museo Slab 500'; font-size:@font20; line-height:24px; text-decoration:none; }
+	a:hover { color:@darkteal; }
+	
+	#tl_personal_creations	{ background: url('../images/timeline-block/timeline_pic_personal_creations.png') top right no-repeat; }
+	#tl_proplants 			{ background: url('../images/timeline-block/timeline_pic_proplants.png') top right no-repeat; }
+	#tl_best_places			{ background: url('../images/timeline-block/timeline_pic_best_places.jpg') top right no-repeat; }
+	#tl_sharis_berries		{ background: url('../images/timeline-block/timeline_pic_sharis_berries.jpg') top right no-repeat; }
+	#tl_cherry_moon_farms	{ background: url('../images/timeline-block/timeline_pic_cherry_moon_farms.jpg') top right no-repeat; }
+	#tl_proflowers			{ background: url('../images/timeline-block/timeline_pic_proflowers.jpg') top right no-repeat; }
+	#tl_chris				{ background: url('../images/timeline-block/timeline_pic_chris.png') top left no-repeat; }
+	#tl_redenvelope			{ background: url('../images/timeline-block/timeline_pic_redenvelope.png') top left no-repeat; }
+	#tl_proflowers_box		{ background: url('../images/timeline-block/timeline_pic_proflowers_box.jpg') top left no-repeat; }
+	#tl_liberty				{ background: url('../images/timeline-block/timeline_pic_liberty.jpg') top left no-repeat; }
+	#tl_nasdaq				{ background: url('../images/timeline-block/timeline_pic_nasdaq.jpg') top left no-repeat; }
+
+	.tl_text	{ cursor:default; display:none; background-color:#fff; filter:alpha(opacity=90); opacity:.9; border:2px solid #ebf7fc; font-family: 'Museo Slab 500'; color:#545f68; font-size:@font14; line-height:24px; padding:15px; position:relative; top:0px; left:0px; }
+	.release	{ display:none; }
+	.showMe		{ display:block; }	
+}
+
+/*
+ * Basic Pages
+ *
+ * @ Base
+ */
+.page-node {
+	.section-about-us .field-name-body 		{ border-top:10px solid @darkteal; }
+	.section-our-culture .field-name-body	{ border-top:10px solid @darkseafoam; }
+	.section-our-brands .field-name-body	{ border-top:10px solid @darkpurple; }
+	.section-contact-us .field-name-body	{ border-top:10px solid @darkgold; }
+	.section-join-our-team .field-name-body	{ border-top:10px solid @darkorange; }
+
+	.field-name-field-feature-image { text-align:right; height:140px; margin-bottom:10px; overflow:hidden;
+	
+	}
+	.field-name-body { padding:30px;
+		h1 { color:@purple; font-family:'Museo Slab'; font-size:@font22; line-height:22px; margin-bottom:30px; }
+		.intro { font-family:'Intro Book Italic'; font-size:@font18; line-height:24px; margin-bottom:10px; }
+		p { margin-bottom:20px; }
+	}
+	
+}
+/*
+ * Basic Pages
+ *
+ * @ Modification - Benefits & Perks
+ */
+ 
+#block-provide-blocks-benefits-block { background:#FFAC59; ; border-top:10px solid @darkorange; color:@white; margin-bottom:10px; padding:30px 20px;
+	h2 { color:@darkorange; font-family:'Intro Book'; font-size:@font18; margin-bottom:20px; }
+	ul li { color:@white; line-height:20px; margin-bottom:20px; }
+}
+
+/*
+ * Basic Pages - 
+ *
+ * @ Modification - Join Our Team
+ */
+
+
+#block-provide-jobs-joblinksearch-block { background:#FFAC59; ; border-top:10px solid @darkorange; color:@white; margin-bottom:10px; padding:30px 20px;
+	h3 { color:@darkorange; font-family:'Intro Book'; font-size:@font18; line-height:18px; margin-bottom:20px; }
+	ul li a { color:@white; }
+	a:hover { color:@darkorange; }
+	.by-category { margin-bottom:30px; }
+}
+
+#node-143 .field-name-body { border:none; padding:0 0 0 5px; }
+
+.linkedin-callout { position:absolute; float:right; height:32px; bottom:0; right:0; text-align:right; width:310px;
+	a { float:right; display:block; line-height:14px; padding:9px 5px; text-align:right; width:150px; }
+	.button { background:url('../images/global/icon-linked-in-sprite.png') 0 0 no-repeat; display:block; float:right; height:32px; overflow:hidden; padding:0; margin:0 5px; width:32px; }
+	.button:hover { background-position:-32px 0; }
+}
+ 
+/*
+ * Basic Pages - 
+ *
+ * @ Modification - What We Stand For
+ */
+#block-provide-blocks-what-we-stand-for-block { background:#91CDD4; ; border-top:10px solid @darkteal; color:@white; margin-bottom:10px; 
+	.image { height:140px; overflow:hidden; }
+	.copy { padding:30px 20px; }
+	h2 { color:@darkteal; font-family:'Intro Book'; font-size:@font18; margin-bottom:20px; }
+	p { color:@white; }
+}
+
+
+
+/*
+ * Basic Pages - 
+ *
+ * @ Modification - Giving Back
+ */
+#block-provide-blocks-giving-back-block, #block-provide-blocks-giving-back-form-block { background:#91CDD4; ; border-top:10px solid @darkteal; color:@white; margin-bottom:10px; padding:30px 20px;
+	h2 { color:@darkteal; font-family:'Intro Book'; font-size:@font18; margin-bottom:20px; }
+	p { color:@white; margin:0 0 10px; }
+	a { color:@purple; }
+	a:hover { color:@darkteal; }
+}
+.view-display-id-giving_back_organization_block { background:#91CDD4; ; border-top:10px solid @darkteal; color:@white; margin-bottom:10px; padding:30px 20px;
+	
+	h2 { color:@darkteal; font-family:'Intro Book'; font-size:@font18; margin-bottom:20px; }
+	ul li { color:@white; margin:0 0 10px; }
+	
+}
+
+
+/*
+ * Basic Pages - 
+ *
+ * @ Modification - Contact Us
+ */
+#block-provide-blocks-address-block { background:@gold; border-top:10px solid @darkgold; color:@white; margin-bottom:10px; padding:30px 20px;
+	h2 { font-family:'Intro Book'; font-size:@font18; margin-bottom:20px; }
+	.location, .phone { margin-bottom:30px; }
+	p { color:@white; margin-bottom:5px; }
+	.address, .number { font-family:'Intro Book Italic'; font-size:@font18; line-height:18px; margin-bottom:10px; }
+	.sociallink { line-height: 12px; 
+		a { font-size:@font12; }
+	}
+	a { color:@purple; }
+	a:hover { color:@darkgold; }
+}
+
+
+/*
+ * Carreers - 
+ *
+ */
+#job-search-results { background:@white; border-top:10px solid @darkorange; clear:left; float:left; padding:30px;
+	p.intro { font-family:'Intro Book Italic'; font-size:@font18; margin-bottom:30px; }
+	.job { clear:left; float:left; margin-bottom:20px; width:100%;
+		.title		{ font-family:'Intro Book'; font-size:@font16; line-height:18px; margin-bottom:4px; }
+		.category	{ font-family:'Intro Book'; font-size:@font14; line-height:16px; }
+		.location	{ font-family:'Intro Book'; float:right; font-size:@font14; line-height:16px; }
+	}
+}
+
+
+/*
+ * Sidebar
+ *
+ */
+
+	
+#sidebar-left .block-menu-block { height:290px; margin:0 0 10px; }
+.section-join-our-team #sidebar-left .block-menu-block { height:140px; margin:5px 0 10px; }
+
+
+	/*
+	 * Sidebar
+	 *
+	 * @ Promo Blocks
+	 */
+#sidebar-left, #sidebar-right { position:relative;
+	.node-promos { height:140px;margin-bottom:10px; overflow:hidden; width:150px; position:relative; }
+
+}
+#sidebar-left {
+	#jobsearch-form-wrapper { margin-bottom:10px; }
+}
+#sidebar-right { 
+	.node-promos { float:left }
+	/* Assumes there is another block first */
+	.block-provide-blocks:nth-child(2) .node-promos { margin-right:5px; }
+	.block-provide-blocks:nth-child(3) .node-promos { margin-left:5px; }
+	.block-provide-blocks:nth-child(4) .node-promos { margin-right:5px; }
+	.block-provide-blocks:nth-child(5) .node-promos { margin-left:5px; }
+}
+	/*
+	 * Sidebar
+	 *
+	 * @ Dream Career
+	 */
+#block-provide-jobs-jobsearch-block { margin-bottom:10px; }
+#jobsearch-form-wrapper { background:@orange; overflow:hidden; position:relative;  width:150px; height:290px;
+	h2 { color:@white; font-size:@font22; line-height:24px; padding: 20px 10px 10px; text-transform:lowercase; }
+	#block-provide-jobs-jobsearch-block { position:absolute; top:0; left:0; width:150px; height:290px; }
+	form#provide-jobs-form { float:left; position:absolute; height:100%; width:100%; top:0;
+		.form-item-location, .form-item-category { height:50px; position:absolute; padding:0 10px;
+			label { color:@white; font-family:'Intro Book'; font-size:@font16; font-weight:normal; line-height:18px; margin-top: 5px; padding-left:2px; }
+			
+			select { position:absolute; left:8px; top:25px; z-index:10; width:130px !important; height:30px !important; line-height:26px; 
+				option { color:@provideblue; display:block; font-family:'Intro Book'; font-size:@font12; height:12px; line-height:13px; overflow:hidden; padding:4px; }
+			}
+			div.select{ background:url('../images/global/form-select_dropdown.png') no-repeat right center @white; border:2px solid #FCA955; top:25px; cursor:default; display:block; float:left; height:11px; left:10px; overflow:hidden; padding:10px 20px 9px 8px; position:absolute; width:94px; z-index:1;
+				span { color:@provideblue; display:block; height:12px; overflow:hidden; width:96px; font-family:'Intro Book'; font-size:@font12; line-height:13px; }
+			}
+		}
+		.form-item-location { top:160px; 
+			select { position:absolute; left:10px; top:25px; }
+			div.select { position:absolute; left:10px; top:25px; }
+		}
+		.form-item-category { top:90px; 
+			select { position:absolute; left:10px; top:25px; }
+			div.select { position:absolute; left:10px; top:25px; }
+		}
+		
+		#edit-submit, #edit-submit--2 { background:url('../images/global/button-find_it.png') 0 0 no-repeat; border:none; cursor:pointer; height:30px; overflow:hidden; position:absolute; bottom:10px; right:10px; text-indent:-150px; width:101px; }
+		#edit-submit:hover, #edit-submit--2:hover { background-position:-101px 0; }
+	}
+}
+		
+.ie8 #jobsearch-form-wrapper h2 { font-size:@font20; } 
+	
+
+
+
+
+/*
+ * Footer
+ * 
+ */
+
+#footer-wrap { background:@slate; bottom:0; height:160px; position:absolute; width:100%;
+	#footer { 
+		#block-menu-block-2 { margin:45px 0 0; width:100%;
+			ul.menu { list-style:none; margin:0; padding:0; text-align:center; width:100%;
+				li { color:@white; display:inline; font-family:"Museo Slab"; font-size:@font16; list-style:none; margin:0 10px 0 0; padding:0;
+					a { color:@white; padding:0 10px 0 5px; text-decoration:none; }
+					a:hover { color:#8493A4; }
+				}
+				li.active {
+					a { color:#8493A4; }
+				}
+			}
+		}
+		#footer-legal { color:#8493A4; font-size:@font10; margin:35px 0 0; text-align:center; text-transform:uppercase; }
+	}
+}
+
+
+/*
+ * Admin
+ *
+ */
+#admin-menu { font-size:@font11; 
+	li { font-size:@font11; }
+}
+
+/*
+ * IE
+ *
+ */
+.ie8 #page-wrap #content-wrap .caption .copy { font-size:@font17; height:40px; }
+
+
+/*
+ * Privacy / Terms
+ */
+.page-terms-conditions .field-name-body { border-top:10px solid @darkteal;  }
+.page-privacy-policy .field-name-body { border-top:10px solid @darkteal; }
+
+
+/*
+ * Giving Back Hack 
+ */
+#node-1008 .blurb-copy { background-color:#EEEEEE; }

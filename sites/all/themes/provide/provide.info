@@ -1,0 +1,30 @@
+name = Provide
+description = Provide Commerce Theme
+package = Provide
+version = VERSION
+core = 7.x
+stylesheets[all][] = includes/css/reset.css
+stylesheets[all][] = includes/css/grid.css
+stylesheets[all][] = includes/css/isotope.css
+stylesheets[all][] = includes/css/typography.css
+stylesheets[all][] = includes/css/provide.less
+
+scripts[] = includes/js/jquery.dynamicScroll-1.0.min.js
+scripts[] = includes/js/jquery.jscroll.min.js
+scripts[] = includes/js/jquery.anchor.js
+scripts[] = includes/js/provide.js
+
+regions[header] = Header
+regions[sub_header] = Sub Header
+regions[content_top] = Content Top
+regions[sidebar_left] = Sidebar Left
+regions[content] = Content
+regions[sidebar_right] = Sidebar Right
+regions[content_bottom] = Content Top
+regions[footer] = Footer
+
+; Information added by drupal.org packaging script on 2012-08-01
+version = "7.15"
+project = "drupal"
+datestamp = "1343839327"
+

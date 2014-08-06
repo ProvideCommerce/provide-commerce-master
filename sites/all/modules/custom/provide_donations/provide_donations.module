@@ -1,0 +1,1839 @@
+<?php
+require_once dirname(__FILE__) . '/extend_simplexml.inc';
+//require_once dirname(__FILE__) . '/PHPExcel/PHPExcel.php';
+
+function provide_donations_menu() {
+  $items = array();
+
+  // $items['about-us/giving-back/form'] = array(
+  //   'page callback' => 'drupal_get_form',
+  //   'page arguments' => array('provide_donations_form'),
+  //   'access arguments' => array('access content')
+  // );
+  
+  // $items['about-us/giving-back/form/thankyou'] = array(
+  //   'page callback' => 'donations_thankyou',
+  //   'access arguments' => array('access content')
+  // );
+
+  $items['admin/donations/view'] = array(
+      'title' => 'View Donations',
+      'page callback' => 'donations_view',
+      'access arguments' => array('access content'),
+      'type' => MENU_NORMAL_ITEM,
+  );
+ $items['admin/donations/delete/%'] = array(
+      'title' => 'Delete Donations',
+      'page callback' => 'donations_delete',
+      'page arguments' => array(3),
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK
+      
+  );
+ $items['admin/donations/detail/%'] = array(
+      'title' => 'Donations Detail',
+      'page callback' => 'donations_view_item',
+      'page arguments' => array(3),
+      'access arguments' => array('access content'),
+      'type' => MENU_CALLBACK
+
+  );
+	$items['admin/donations/xml/%'] = array(
+		'title' => 'Donations Detail',
+		'page callback' => 'donations_xml_item',
+		'page arguments' => array(3),
+		'access arguments' => array('access content'),
+		'type' => MENU_CALLBACK
+	);
+	$items['admin/donations/excel/%'] = array(
+		'title' => 'Donations Detail',
+		'page callback' => 'donations_excel_item',
+		'page arguments' => array(3),
+		'access arguments' => array('access content'),
+		'type' => MENU_CALLBACK
+	);
+  return $items;
+}
+
+
+/**
+ * Implementation of hook_block_info().
+ */
+function provide_donations_block_info() {
+  $blocks = array();
+  $blocks['form-block'] = array(
+    'info' => t('Custom: Donation Form Block'),
+  );
+  $blocks['thankyou-block'] = array(
+    'info' => t('Custom: Donation Thank you'),
+  );
+  return $blocks;
+}
+
+
+/**
+ * Implementation of hook_block_view().
+ */
+function provide_donations_block_view($delta='') {
+    $block = array();
+    switch ($delta) {
+        case 'form-block':
+            $block['subject'] = '';
+            $block['content'] = drupal_get_form('provide_donations_form');
+        	break;
+	    case 'thankyou-block':
+	        $block['subject'] = '';
+	        $block['content'] = donations_thankyou();
+	       break;
+	  }
+    return $block;
+}
+
+function provide_donations_form($form, &$form_state){
+    $form['#tree'] = TRUE;
+    $form['#attributes'] = array('enctype' => "multipart/form-data");
+
+	$form['#prefix'] = '<div class="field-name-body"><div id="donations-form-wrapper"><h1>Submit a Donation Request</h1>';
+	$form['#suffix'] = '</div></div>';
+	$form['org_name'] = array(
+		'#title' => t('Organization Name'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	
+	$form['org_add1'] = array(
+		'#title' => t('Organization Address'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	$form['org_add2'] = array(
+		'#title' => t('Organization Address 2'),
+		'#type' => 'textfield',
+		//'#required' => true
+	);
+	$form['org_city'] = array(
+		'#title' => t('Organization City'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	$form['org_state'] = array(
+		'#title' => t('Organization State'),
+		'#type' => 'select',
+		'#required' => true,
+		'#options' => array(
+		    '' => t('Please Select'),
+		    'AL' => t('Alabama'),
+		    'AK' => t('Alaska'),
+		    'AZ' => t('Arizona'),
+		    'AR' => t('Arkansas'),
+		    'CA' => t('California'),
+		    'CO' => t('Colorado'),
+		    'CT' => t('Connecticut'),
+		    'DE' => t('Delaware'),
+		    'DC' => t('District of Columbia'),
+		    'FL' => t('Florida'),
+		    'GA' => t('Georgia'),
+		    'HI' => t('Hawaii'),
+		    'ID' => t('Idaho'),
+		    'IL' => t('Illinois'),
+		    'IN' => t('Indiana'),
+		    'IA' => t('Iowa'),
+		    'KS' => t('Kansas'),
+		    'KY' => t('Kentucky'),
+		    'LA' => t('Louisiana'),
+		    'ME' => t('Maine'),
+		    'MD' => t('Maryland'),
+		    'MA' => t('Massachusetts'),
+		    'MI' => t('Michigan'),
+		    'MN' => t('Minnesota'),
+		    'MS' => t('Mississippi'),
+		    'MO' => t('Missouri'),
+		    'MY' => t('Montana'),
+		    'NE' => t('Nebraska'),
+		    'NV' => t('Nevada'),
+		    'NH' => t('New Hampshire'),
+		    'NJ' => t('New Jersey'),
+		    'NM' => t('New Mexico'),
+		    'NY' => t('New York'),
+		    'NC' => t('North Carolina'),
+		    'ND' => t('North Dakota'),
+		    'OH' => t('Ohio'),
+		    'OK' => t('Oklahoma'),
+		    'OR' => t('Oregon'),
+		    'PA' => t('Pennsylvania'),
+		    'RI' => t('Rhode Island'),
+		    'SC' => t('South Carolina'),
+		    'SD' => t('South Dakota'),
+		    'TN' => t('Tennessee'),
+		    'TX' => t('Texas'),
+		    'UT' => t('Utah'),
+		    'VT' => t('Vermont'),
+		    'VA' => t('Virginia'),
+		    'WA' => t('Washington'),
+		    'WV' => t('West Virginia'),
+		    'WI' => t('Wisconsin'),
+		    'WY' => t('Wyoming'),
+		),
+	);
+	$form['org_zip'] = array(
+		'#title' => t('Organization Zip Code'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	$form['org_tax'] = array(
+		'#title' => t('Organization Federal Tax ID number'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	$form['org_web'] = array(
+		'#title' => t('Organization Website'),
+		'#type' => 'textfield',
+	);
+	$form['org_category'] = array(
+		'#title' => t('Organization Category'),
+		'#required' => true,
+		'#type' => 'select',
+		'#options' => array(
+			'' => t('Please Select'),
+		    'Children' => t('Children'),
+		    'Education' => t('Education'),
+		    'Military' => t('Military'),
+		    'Women' => t('Women'),
+		    'Other' => t('Other'),
+		),
+	);
+	$form['org_description'] = array(
+		'#description' => t('A brief description of your Organization, including purpose and objectives '),
+		'#type' => 'textarea',
+		'#resizable' => False
+	);
+	$form['org_cause'] = array(
+		'#title' => t('What percent of the money raised by your Organization goes directly towards the cause? '),
+		'#type' => 'select',
+		'#options' => array('0-50%','50-60%','60-70%','70-80%','80-90%','90-100%','Unknown'),
+	);
+	
+	$form['org_link'] = array(
+	    '#type' => 'select',
+	    '#default_value' => isset($node->active) ? $node->active : 1,
+	    '#options' => array(0 => t('Select'), 1 => t('Yes'), 2 => t('No')),
+	    '#title' => t('in return for our donation, we are asking our charitable partners and organizations to show support by linking to our website from the homepage or another high-visibility page their websites, for a minimum of one year. Is this something that you would be able to do?'),
+	  );
+	$form['yes'] = array(
+		'#type' => 'fieldset',
+		'#states' => array(
+		      'visible' => array(
+		        ':input[name="org_link"]' => array('value' => 1),
+		      ),
+		    ),
+	);
+	$form['yes']['contact'] = array(
+		'#title' => t('Website Contact Person'),
+		'#type' => 'textfield',
+		'#states' => array(
+		      'required' => array(
+		        ':input[name="org_link"]' => array('value' => 1),
+		      ),
+		    ),
+	);
+	$form['yes']['org_url'] = array(
+		'#title' => t('Organization Url'),
+		'#type' => 'textfield',
+		'#states' => array(
+		      'required' => array(
+		        ':input[name="org_link"]' => array('value' => 1),
+		      ),
+		    ),
+	);
+	$form['yes']['email'] = array(
+		'#title' => t('Email Address'),
+		'#type' => 'textfield',
+		'#states' => array(
+		      'required' => array(
+		        ':input[name="org_link"]' => array('value' => 1),
+		      ),
+		    ),
+	);
+	$form['yes']['phone'] = array(
+		'#title' => t('Phone Number'),
+		'#type' => 'textfield',
+		'#states' => array(
+		      'required' => array(
+		        ':input[name="org_link"]' => array('value' => 1),
+		      ),
+		    ),
+	);
+	$form['yes']['length'] = array(
+		'#title' => t('Length of time you would be willing to include our link?'),
+		'#type' => 'select',
+		'#options' => array('6 month - 1 year','More than 1 year','Other'),
+		
+	);
+	$form['yes']['length_explain'] = array(
+		'#title' => t('Please Explain'),
+		'#type' => 'textarea',
+		'#resizable' => False,
+		'#states' => array(
+		      'visible' => array(
+		        ':input[name="yes[length]"]' => array('value' => 2),
+		      ),
+		    ),
+	);
+	
+	
+	$form['no'] = array(
+		'#type' => 'fieldset',
+		'#states' => array(
+		      'visible' => array(
+		        ':input[name="org_link"]' => array('value' => 2),
+		      ),
+		    ),
+	);
+	$form['no']['no_explain'] = array(
+		'#title' => t('Reason/Explanation'),
+		'#type' => 'textarea',
+		'#resizable' => False,
+		'#states' => array(
+		      'required' => array(
+		        ':input[name="org_link"]' => array('value' => 2),
+		      ),
+		    ),
+	);
+	
+	///event info
+	
+	$form['event_info'] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Event Information'),
+	);
+	$form['event_info']['event_name'] = array(
+		'#title' => t('Event Name'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	$form['event_info']['event_location'] = array(
+		'#title' => t('Event Location'),
+		'#type' => 'select',
+		'#options' => array(0 => 'Select Location', 'San Diego' => 'Local to San Diego', 'Nonlocal' => 'Nonlocal'),
+		'#required' => true
+	);
+	$form['event_info']['event_date'] = array(
+		  '#title'=>t('Event Date'),
+		  '#date_format' => 'd-m-Y',
+		  '#date_year_range' => '0:+3',
+		  '#type' => 'date_popup',
+		  '#required' => true
+	);
+	$form['event_info']['no_attendees'] = array(
+		'#title' => t('Number of Attendees'),
+		'#type' => 'textfield'
+	);
+	
+	$form['event_info']['develiery_location_name'] = array(
+		'#title' => t('Name of Delivery Location'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	
+	$form['event_info']['event_add1'] = array(
+		'#title' => t('Event Address'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	$form['event_info']['event_add2'] = array(
+		'#title' => t('Event Address 2'),
+		'#type' => 'textfield',
+
+	);
+	$form['event_info']['event_city'] = array(
+		'#title' => t('Event City'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	$form['event_info']['event_state'] = array(
+		'#title' => t('Event State'),
+		'#type' => 'select',
+		'#required' => true,
+		'#options' => array(
+		    '' => t('Please Select'),
+		    'AL' => t('Alabama'),
+		    'AK' => t('Alaska'),
+		    'AZ' => t('Arizona'),
+		    'AR' => t('Arkansas'),
+		    'CA' => t('California'),
+		    'CO' => t('Colorado'),
+		    'CT' => t('Connecticut'),
+		    'DE' => t('Delaware'),
+		    'DC' => t('District of Columbia'),
+		    'FL' => t('Florida'),
+		    'GA' => t('Georgia'),
+		    'HI' => t('Hawaii'),
+		    'ID' => t('Idaho'),
+		    'IL' => t('Illinois'),
+		    'IN' => t('Indiana'),
+		    'IA' => t('Iowa'),
+		    'KS' => t('Kansas'),
+		    'KY' => t('Kentucky'),
+		    'LA' => t('Louisiana'),
+		    'ME' => t('Maine'),
+		    'MD' => t('Maryland'),
+		    'MA' => t('Massachusetts'),
+		    'MI' => t('Michigan'),
+		    'MN' => t('Minnesota'),
+		    'MS' => t('Mississippi'),
+		    'MO' => t('Missouri'),
+		    'MY' => t('Montana'),
+		    'NE' => t('Nebraska'),
+		    'NV' => t('Nevada'),
+		    'NH' => t('New Hampshire'),
+		    'NJ' => t('New Jersey'),
+		    'NM' => t('New Mexico'),
+		    'NY' => t('New York'),
+		    'NC' => t('North Carolina'),
+		    'ND' => t('North Dakota'),
+		    'OH' => t('Ohio'),
+		    'OK' => t('Oklahoma'),
+		    'OR' => t('Oregon'),
+		    'PA' => t('Pennsylvania'),
+		    'RI' => t('Rhode Island'),
+		    'SC' => t('South Carolina'),
+		    'SD' => t('South Dakota'),
+		    'TN' => t('Tennessee'),
+		    'TX' => t('Texas'),
+		    'UT' => t('Utah'),
+		    'VT' => t('Vermont'),
+		    'VA' => t('Virginia'),
+		    'WA' => t('Washington'),
+		    'WV' => t('West Virginia'),
+		    'WI' => t('Wisconsin'),
+		    'WY' => t('Wyoming'),
+		),
+	);
+	$form['event_info']['event_zip'] = array(
+		'#title' => t('Event Zip Code'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	
+	$form['event_info']['delivery_date'] = array(
+		  '#title'=>t('Delivery Date'),
+		  '#date_format' => 'd-m-Y',
+		  '#date_year_range' => '0:+3',
+		  '#type' => 'date_popup',
+		  '#description' => t('NOTE: If you are requesting flowers, they should be delivered a minimum of 2 days before your event to ensure that they hydrate well and open up to their prime before the event.'),
+		  '#required' => true
+	);
+	
+	/// donation info
+	
+	$form['donation_info'] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Donation Information'),
+	);
+	$form['donation_info']['contact_name'] = array(
+		'#title' => t('Donation contact name'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	
+	$form['donation_info']['email'] = array(
+		'#title' => t('Email Address'),
+		'#type' => 'textfield',
+		'#required' => true
+	);
+	$form['donation_info']['phone'] = array(
+		'#title' => t('Donation Contact Phone Number'),
+		'#type' => 'textfield',
+
+	);
+	
+    $options = array('Cash' => 'Cash','Gift Certificate' => 'Gift Certificate', 'Product' => 'Product');
+	$form['donation_info']['type'] = array(
+		'#title' => t('Donation Type'),
+		'#type' => 'checkboxes',
+		//'#options' => drupal_map_assoc(array('Cash','Gift Certificate','Product')),
+		'#options' => $options,
+		'#required' => true
+		
+	);
+
+	$form['product'] = array(
+		'#type' => 'fieldset',
+		'#title' => t('product'),
+		'#states' => array(
+		      'visible' => array(
+		        ':input[name="donation_info[type][Product]"]' => array('checked' => TRUE),
+		      ),
+		    ),
+	);
+	// add more product fields to the list
+	if (empty($form_state['num_products'])) {
+	    $form_state['num_products'] = 1;
+	  }
+	for ($i = 1; $i <= $form_state['num_products']; $i++) {
+	$form['product']['items'][$i] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Item #@num', array('@num' => $i)), 
+		'#collapsible' => TRUE, 
+	    '#collapsed' => FALSE,
+		);
+	$form['product']['items'][$i]['value'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Quantity'),
+		'#size' => 2,
+		'#default_value' => 0,
+		'#element_validate' => array('element_validate_number')
+	);
+	$form['product']['items'][$i]['brand'] = array(
+		'#title' => t('What Brand'),
+		'#type' => 'select',
+		'#options' => array('0' => 'Select One','ProFlowers' => 'ProFlowers','ProPlants' => 'ProPlants','RedEnvelope' => 'RedEnvelope','Shari\'s Berries' => 'Shari\'s Berries','Cherry Moon Farms' => 'Cherry Moon Farms','Personal Creations' => 'Personal Creations'),
+		
+	);
+	
+	$form['product']['items'][$i]['prod_name'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Product Name'),
+		'#description' => t('(As described on our brand website) Please be as specific as possible regarding the donation'),
+	);
+	$form['product']['items'][$i]['prod_item_number'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Product Item number'),
+		'#description' => t('o	Product Item Number (as indicated on our brand website) '),
+	);
+	$form['product']['items'][$i]['prod_comments'] = array(
+		'#type' => 'textarea',
+		'#title' => t('Additional Information/Comments'),
+		'#resizable' => False
+	);
+ 	}
+
+     // Adds "Add another product" button
+	  $form['product']['add_product'] = array(
+	    '#type' => 'submit', 
+	    '#value' => t('Add another product'), 
+	    '#submit' => array('provide_donations_add_product'),
+	  );
+	
+	
+	
+	//
+	$form['gifts'] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Gift Certificates'),
+		 '#states' => array(
+			      'visible' => array(
+			        ':input[name="donation_info[type][Gift Certificate]"]' => array('checked' => TRUE),
+			      ),
+			    ),
+	);
+	// add more product fields to the list
+	if (empty($form_state['num_gifts'])) {
+	    $form_state['num_gifts'] = 1;
+	  }
+	for ($j = 1; $j <= $form_state['num_gifts']; $j++) {
+	$form['gifts']['items'][$j] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Gift Certificate #@num', array('@num' => $j)), 
+		'#collapsible' => TRUE, 
+	    '#collapsed' => FALSE,
+		);
+		$form['gifts']['items'][$j]['qty'] = array(
+			'#title' => t('Quantity'),
+			'#type' => 'textfield',
+			'#size' => 2,
+			'#default_value' => 0,
+			'#element_validate' => array('element_validate_number')
+			
+		);
+
+	$form['gifts']['items'][$j]['brand'] = array(
+		'#title' => t('What Brand'),
+		'#type' => 'select',
+		'#options' => array('0' => 'Select One','ProFlowers' => 'ProFlowers','ProPlants' => 'ProPlants','RedEnvelope' => 'RedEnvelope','Shari\'s Berries' => 'Shari\'s Berries','Cherry Moon Farms' => 'Cherry Moon Farms','Personal Creations' => 'Personal Creations'),
+		
+	);
+	$form['gifts']['items'][$j]['amount'] = array(
+		'#type' => 'select',
+		'#title' => t('Gift Certificate Amount'),
+		'#options' => array('0' => 'Select One','$25' => '$25','$50' => '$50','$75' => '$75','$100' => '$100','3 months of Product' => '3 months of Product','6 months of Product' => '6 months of Product','12 months of Product' => '12 months of Product')
+	);
+	$form['gifts']['items'][$j]['type'] = array(
+		'#type' => 'select',
+		'#title' => t('Type'),
+		'#options' => array('0' => 'Select One','Flowers' => 'Flowers','Fruit' => 'Fruit','Plants' => 'Plants'),
+		'#states' => array(
+		      'visible' => array(
+		        ':input[name="gifts[items][1][amount]"]' => array(
+		        	array('value' => '3 months of Product'),
+					array('value' => '6 months of Product'),
+					array('value' => '12 months of Product')
+		        ),
+		      ),
+		    ),
+	);
+	
+ 	}
+
+     // Adds "Add another product" button
+	  $form['gifts']['add_gifts'] = array(
+	    '#type' => 'submit', 
+	    '#value' => t('Add another gift certificate'), 
+	    '#submit' => array('provide_donations_add_gifts'),
+	  );
+	
+	// $form['gift'] = array(
+	// 		'#type' => 'fieldset',
+	// 		'#title' => t('Gift Certificate'),
+	// 	);
+	
+	
+	$form['cash'] = array(
+		'#type' => 'fieldset',
+		'#title' => t('Cash'),
+		'#states' => array(
+		      'visible' => array(
+		        ':input[name="donation_info[type][Cash]"]' => array('checked' => TRUE),
+		      ),
+		    ),
+	);
+	$form['cash']['amount'] = array(
+		'#type' => 'textfield',
+		'#title' => t('Cash Donation Amount'),
+		'#states' => array(
+		      'required' => array(
+		        ':input[name="donation_info[type][Cash]"]' => array('checked' => TRUE),
+		      ),
+		    ),
+	);
+	$form['cash']['comments'] = array(
+		'#type' => 'textarea',
+		'#title' => t('Additional Information '),
+		'#resizable' => False
+	);
+	
+	/*
+	 * Disabled 10.03.2013 *
+	 *
+	$form['cash']['file'] = array(
+	      '#type' => 'managed_file',
+		  '#title' => t('If you would like to include an attachment (for example, a sponsorship packet) please attach it here '),
+		  '#size' => 20,
+		  '#upload_location' => 'public://uploads'
+	    
+	  );
+	*/
+	
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Submit')
+	);
+	
+	
+
+	  // If we have more than one name, this button allows removal of the
+	  // last name.
+	  // if ($form_state['num_products'] > 1) {
+	  // 	    $form['remove_name'] = array(
+	  // 	      '#type' => 'submit', 
+	  // 	      '#value' => t('Remove latest product'), 
+	  // 	      '#submit' => array('provide_donations_remove_product'),
+	  // 	      // Since we are removing a name, don't validate until later. 
+	  // 	      '#limit_validation_errors' => array(),
+	  // 	    );
+	  // 	  }
+	  // 	
+	return $form;
+	
+
+}
+
+function provide_donations_add_product($form, &$form_state) {
+  // Everything in $form_state is persistent, so we'll just use
+  // $form_state['product']
+  $form_state['num_products']++;
+
+  // Setting $form_state['rebuild'] = TRUE causes the form to be rebuilt again.
+  $form_state['rebuild'] = TRUE;
+}
+
+function provide_donations_add_gifts($form, &$form_state) {
+  // Everything in $form_state is persistent, so we'll just use
+  // $form_state['product']
+  $form_state['num_gifts']++;
+
+  // Setting $form_state['rebuild'] = TRUE causes the form to be rebuilt again.
+  $form_state['rebuild'] = TRUE;
+}
+
+function donations_form(){
+	
+	return drupal_get_form('provide_donations_form');
+}
+function provide_donations_form_validate($form, &$form_state){
+	print_r($form_state['values']['donation_info']['type']);
+	if($form_state['values']['donation_info']['type']['Cash'] <> '0'){
+		if(empty($form_state['values']['cash']['amount'])){
+			form_error($form, t('Cash Amount is Required'));
+		}
+		
+	}
+	if($form_state['values']['donation_info']['type']['Gift Certificate'] <> '0'){
+		foreach($form_state['values']['gifts']['items'] as $gift){
+			if($gift['qty'] == '0'){
+			    form_error($form, t('Gift Quantity must be larger than 0'));
+			}
+			if($gift['brand'] == '0'){
+				form_error($form, t('Select Gift Brand'));
+			}
+			if($gift['amount'] == '0'){
+				form_error($form, t('Select Gift Amount'));
+			}
+		}
+		
+	}
+	
+	if($form_state['values']['donation_info']['type']['Product'] <> '0'){
+		foreach($form_state['values']['product']['items'] as $product){
+			if($product['value'] == '0'){
+			    form_error($form, t('Product Quantity must be larger than 0'));
+			}
+			if($product['brand'] == '0'){
+				form_error($form, t('Select Product Brand'));
+			}
+			if($product['prod_name'] == ''){
+				form_error($form, t('Provide Product Name'));
+			}
+			if($product['prod_item_number'] == ''){
+				form_error($form, t('Provide Product Item Number'));
+			}
+		}
+		
+	}
+
+
+	  
+}
+
+function provide_donations_form_submit($form, &$form_state){
+
+	
+  	  // $file = file_load($form_state['values']['cash']['file']);
+  	  // 
+  	  // 	  $file->status = FILE_STATUS_PERMANENT;
+  	  // 
+  	  // 	  file_save($file);
+  	  // 
+  	  // 	  $fileid = file_load($file);
+  	  
+	
+	$org_name = $form_state['values']['org_name'];
+	$org_add1 = $form_state['values']['org_add1'];
+	$org_add2 = $form_state['values']['org_add2'];
+	$org_city = $form_state['values']['org_city'];
+	$org_state = $form_state['values']['org_state'];
+	$org_zip = $form_state['values']['org_zip'];
+	$org_tax = $form_state['values']['org_tax'];
+	$org_web = $form_state['values']['org_web'];
+	$org_cause = $form_state['values']['org_cause'];
+	
+	//money raised
+	$money_raised = '';
+	switch($org_cause){
+		case 0:
+			$money_raised = '0-50%';
+		break;
+		case 1:
+			$money_raised = '50%-60%';
+		break;
+		case 2:
+			$money_raised = '60%-70%';
+		break;
+		case 3:
+			$money_raised = '70%-80%';
+		break;
+		case 4:
+			$money_raised = '80%-90%';
+		break;
+		case 5:
+			$money_raised = '90%-100%';
+		break;
+		case 6:
+			$money_raised = 'unknown';
+		break;
+	}
+	
+	
+	
+	$org_link = $form_state['values']['org_link'];
+	$yes_link = '';
+	switch($org_link){
+		case 0:
+			$yes_link = '';
+		break;
+		case 1:
+			$yes_link = 'yes';
+		break;
+		case 2:
+			$yes_link = 'no';
+		break;
+	}
+	$org_description = $form_state['values']['org_description'];
+	
+	$web_contact = $form_state['values']['yes']['contact'];
+	$web_org_url = $form_state['values']['yes']['org_url'];
+	$web_email = $form_state['values']['yes']['email'];
+	$web_phone = $form_state['values']['yes']['phone'];
+	$web_length = $form_state['values']['yes']['length'];
+	
+	$length = '';
+	switch($web_length){
+		case 0:
+			$length = '6 months-1year';
+		break;
+		case 1:
+			$length = 'More than 1 year';
+		break;
+		case 2:
+			$length = 'Other';
+		break;
+	}
+	
+	$web_explain = $form_state['values']['yes']['length_explain'];
+	
+	if($form_state['values']['yes']['length_explain'] == ''){
+		$web_explain = $form_state['values']['no']['no_explain'];
+    }
+	$event_name = $form_state['values']['event_info']['event_name'];
+	$event_location = $form_state['values']['event_info']['event_location'];
+	$event_date = $form_state['values']['event_info']['event_date'];
+	$no_attendees = $form_state['values']['event_info']['no_attendees'];
+	$event_delivery_location = $form_state['values']['event_info']['delivery_location_name'];
+	$event_name = $form_state['values']['event_info']['event_name'];
+	$event_add1 = $form_state['values']['event_info']['event_add1'];
+	$event_add2 = $form_state['values']['event_info']['event_add2'];
+	$event_city = $form_state['values']['event_info']['event_city'];
+	$event_state = $form_state['values']['event_info']['event_state'];
+	$event_zip = $form_state['values']['event_info']['event_zip'];
+	$event_delivery_date = $form_state['values']['event_info']['delivery_date'];
+	
+	$donation_contact_name = $form_state['values']['donation_info']['contact_name'];
+	$donation_contact_email = $form_state['values']['donation_info']['email'];
+	$donation_contact_phone = $form_state['values']['donation_info']['phone'];
+	$donation_type = $form_state['values']['donation_info']['type'];
+	
+	$dtypes = '';
+	$cash = false;
+	$gift = false;
+	$product = false;
+	foreach($donation_type as $donation){
+		if($donation == 'Cash'){
+			$dtypes .= 'cash ';
+			$cash = true;
+	    }else if($donation == 'Gift Certificate'){
+		    $dtypes .= 'gift certificate ';
+		    $gift = true;
+	    }else if($donation == 'Product'){
+		    $dtypes .= 'product ';
+		    $product = true;
+	   }
+	}
+	
+	
+	$did = db_insert('provide_donations')
+	->fields(array(
+	  	'org_name' => $org_name,
+		'org_address' => $org_add1,
+		'org_address2' => $org_add2,
+		'org_city' => $org_city,
+		'org_state' => $org_state,
+		'org_zip' => $org_zip,
+		'org_taxid' => $org_tax,
+		'org_url' => $org_web,
+		'money_raised' => $money_raised,
+		'link' => $yes_link,
+		'org_description' => $org_description,
+		//contact name for web guy
+		'web_contact_name' => $web_contact,
+		'web_site_url' => $web_org_url,
+		'web_contact_email' => $web_email,
+		'web_contact_phone' => $web_phone,
+		'web_link_length' => $length,
+		'web_explain' => $web_explain,
+		//event info
+		'event_name' => $event_name,
+		'event_location' => $event_location,
+		'event_date' => $event_date,
+		'no_attendees' => $no_attendees,
+		'event_delivery_location' => $event_delivery_location,
+		'event_address' => $event_add1,
+		'event_address2' => $event_add2,
+		'event_city' => $event_city,
+		'event_state' => $event_state,
+		'event_zip' => $event_zip,
+		'event_delivery_date' => $event_delivery_date,
+		//donation info
+		'donation_contact_name' => $donation_contact_name,
+		'donation_email' => $donation_contact_email,
+		'donation_phone' => $donation_contact_phone,
+		'donation_type' => $dtypes,
+		'created' => REQUEST_TIME,
+	))
+	->execute();
+	//product
+	if($product){
+		//get prod info
+		$products = $form_state['values']['product']['items'];
+		
+		foreach($products as $product){
+			
+			$pid = db_insert('provide_products')
+			->fields(array(
+				'did' => $did,
+				'prod_qty' => $product['value'],
+				'prod_brand' => $product['brand'],
+				'prod_name' => $product['prod_name'],
+				'prod_item_number' => $product['prod_item_number'],
+				'prod_comments' => $product['prod_comments'],
+				'created' => REQUEST_TIME,
+			))
+			->execute();
+		}
+		
+	}
+	
+	if($cash){
+		$pid = db_insert('provide_cash')
+		->fields(array(
+			'did' => $did,
+			'cash_amount' => $form_state['values']['cash']['amount'],
+			'cash_comments' => $form_state['values']['cash']['comments'],
+			'cash_file' => $file,
+			'created' => REQUEST_TIME,
+		))
+		->execute();
+		
+	}
+	
+	if($gift){
+		
+		$gifts = $form_state['values']['gifts']['items'];
+		$i = 0;
+		foreach($gifts as $cert){
+		$i++;	
+			$pid = db_insert('provide_gift_certificates')
+			->fields(array(
+				'did' => $did,
+				'cert_qty' => $cert['qty'],
+				'cert_brand' => $cert['brand'],
+				'cert_prod_type' => $cert['type'],
+				'cert_amount' => $cert['amount'],
+				'created' => REQUEST_TIME,
+			))
+			->execute();
+		}
+		
+	}
+	$_SESSION['submit_id'] = $did;
+
+	drupal_goto('/about-us/giving-back/thank-you');
+}
+
+function donations_thankyou(){
+	
+	global $base_url;
+	
+	$message = '';
+
+    $download_url = $base_url.'/admin/donations/xml/'.$_SESSION['submit_id'];
+    $view_url = $base_url.'/admin/donations/detail/'.$_SESSION['submit_id'];
+    //save donation
+    donations_xml_item($_SESSION['submit_id'], false);
+
+        		 $mail_params = array(
+        	        'message' => 'Donation request click here <a href="'.$download_url.'">'.$download_url.'</a> to download the XML file with request info or here to view <a href="'.$view_url.'">'.$view_url.'</a> the donation',
+        	        'subject' => 'Donation Request',
+        	        'headers' => '',
+        	        'node' => '',
+        	        'submission' => '',
+        	        'email' => 'donations@providecommerce.com'
+        	      );
+        	    $mail_params['headers']['Content-Type'] = 'text/html; charset=UTF-8';
+
+
+
+    $message = drupal_mail('provide_donation', 'donation', 'donations@providecommerce.com', language_default(), $mail_params, $email,TRUE);
+	
+	return 'Thank you for submitting your donation request.  We will respond back to you once your request is reviewed.  Donation requests are reviewed weekly, thank you in advance for your patience.   
+
+	Click here if you would like to print a copy of your submission – allow for print capability of web form. 
+	'.$_SESSION['submit_id'];
+	
+}
+
+function donations_view(){
+	
+	$query = db_select('provide_donations', 'd')
+		->fields('d',array('org_name','event_name','id','event_date','event_location'))//SELECT the fields from user
+	    ->orderBy('id', 'DESC');//LIMIT to 2 records
+	
+		$result = $query->execute();
+		
+		
+        $rows = array();
+        $possition = 1;
+        $don = array();
+	    while($record = $result->fetchAssoc()) {
+	        $don['org_name'] = $record['org_name'];
+	        $don['event_name'] = $record['event_name'];
+	        $don['event_location'] = $record['event_location'];
+	        $don['event_date'] = $record['event_date'];
+	        
+	        $id = $record['id'];
+	        $don['ops'] = '<a href="/admin/donations/detail/'.$id.'">View</a>|<a href="/admin/donations/xml/'.$id.'">Download XML</a>|<a href="/admin/donations/delete/'.$id.'">Delete</a>';
+	        $rows[] = array($don['org_name'],$don['event_name'],$don['event_location'],$don['event_date'],$don['ops']);
+		    $possition++;
+	    }
+	// print_r($rows);
+	// 	die();
+	
+	$header = array('Org Name','Event Name','Event Location','Event Date','Operations');
+	//return theme('table', $header, $rows);
+	return theme('table', array(
+	    'header' => $header, 
+	    'rows' => $rows,
+	    'attributes' => array('width' => '100%')
+	));
+	
+}
+
+function donations_delete($did){
+
+	$num_deleted = db_delete('provide_donations')
+	  ->condition('id', $did)
+	  ->execute();
+	
+	$num_deleted = db_delete('provide_products')
+	  ->condition('did', $did)
+	  ->execute();
+	
+	$num_deleted = db_delete('provide_cash')
+	  ->condition('did', $did)
+	  ->execute();
+	
+	$num_deleted = db_delete('provide_gift_certificates')
+	  ->condition('did', $did)
+	  ->execute();
+	
+	drupal_goto('admin/donations/view');
+}
+
+function donations_view_item($did){
+	$result = db_select('provide_donations', 'd')
+		->fields('d')
+		->condition('id',$did)
+		->execute()
+		->fetchAssoc();
+		$rows = array();
+		$xml = array();
+		$header = array('Field','Value');
+		
+			$rows[] = array('Org Name', $result['org_name']);
+			$rows[] = array('Org Phone', $result['org_phone']);
+			$rows[] = array('Org Address', $result['org_address']);
+			$rows[] = array('Org Address2', $result['org_address2']);
+			$rows[] = array('Org City', $result['org_city']);
+			$rows[] = array('Org State', $result['org_state']);
+			$rows[] = array('Org Zip', $result['org_zip']);
+			$rows[] = array('Org Url', $result['org_url']);
+			$rows[] = array('Org Tax ID', $result['org_taxid']);
+			$rows[] = array('Org Description', $result['org_description']);
+			$rows[] = array('Money Donated', $result['money_raised']);
+			$rows[] = array('Web Contact', $result['web_contact_name']);
+			$rows[] = array('Web Contact Email', $result['web_contact_email']);
+			$rows[] = array('Web Contact Phone', $result['web_contact_phone']);
+			$rows[] = array('Web URL', $result['web_site_url']);
+			$rows[] = array('Web Link Length', $result['web_link_length']);
+			$rows[] = array('Web Comments', $result['web_explain']);
+			$rows[] = array('Event Name', $result['event_name']);
+			$rows[] = array('Event Location', $result['event_location']);
+			$rows[] = array('Event Date', $result['event_date']);
+			$rows[] = array('Number of Attendees', $result['no_attendees']);
+			$rows[] = array('Event Delivery Location', $result['event_delivery_location']);
+			$rows[] = array('Event Address', $result['event_address']);
+			$rows[] = array('Event Address2', $result['event_address2']);
+			$rows[] = array('Event City', $result['event_city']);
+			$rows[] = array('Event State', $result['event_state']);
+			$rows[] = array('Event Zip', $result['event_zip']);
+			$rows[] = array('Event Delivery Date', $result['event_delivery_date']);
+			$rows[] = array('Donation Contact Name', $result['donation_contact_name']);
+			$rows[] = array('Donation Email', $result['donation_email']);
+			$rows[] = array('Donation Phone', $result['donation_phone']);
+			$rows[] = array('Donation type', $result['donation_type']);
+			
+		
+		$html = theme('table', array(
+		    'header' => $header, 
+		    'rows' => $rows,
+		    'attributes' => array('width' => '100%')
+		));
+		
+		
+		$cash_result = db_select('provide_cash', 'd')
+			->fields('d',array('id','cash_amount','cash_comments'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+		$cash_row = array();
+		
+		foreach($cash_result as $cashd){
+			 $cash_row[] = array($cashd->cash_amount,$cashd->cash_comments);
+		}
+	   
+		
+		$cash_header = array('Cash Amount','Comments');
+		$html .= theme('table', array(
+		    'header' => $cash_header, 
+		    'rows' => $cash_row,
+		    'attributes' => array('width' => '100%')
+		));
+		
+		
+		$product_result = db_select('provide_products', 'd')
+			->fields('d',array('id','prod_qty','prod_brand','prod_name','prod_item_number','prod_comments'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+		$peod_row = array();
+		foreach($product_result as $productd){
+	    	$prod_row[] = array($productd->prod_qty,$productd->prod_brand,$productd->prod_name,$productd->prod_item_number,$productd->prod_comments);
+	   }
+		
+		$prod_header = array('QTY','Product Brand','Product Name','Product Item Number','Comments');
+		$html .= theme('table', array(
+		    'header' => $prod_header, 
+		    'rows' => $prod_row,
+		    'attributes' => array('width' => '100%')
+		));
+		
+		$certificate_result = db_select('provide_gift_certificates', 'd')
+			->fields('d',array('id','cert_qty','cert_brand','cert_prod_type','cert_amount'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+			
+			
+			
+		$cert_row = array();
+		foreach($certificate_result as $certificate){
+	    $cert_row[] = array($certificate->cert_qty,$certificate->cert_brand,$certificate->cert_prod_type,$certificate->cert_amount);
+		}
+		$cert_header = array('QTY','Brand','Product Type','Cert Amount');
+		$html .= theme('table', array(
+		    'header' => $cert_header, 
+		    'rows' => $cert_row,
+		    'attributes' => array('width' => '100%')
+		));
+		
+		return $html;
+}
+
+function donations_xml_item($did, $download = true){
+	$result = db_select('provide_donations', 'd')
+		->fields('d')
+		->condition('id',$did)
+		->execute()
+		->fetchAssoc();
+		$rows = array();
+		$xml = array();
+		$header = array('Field','Value');
+		$organization = $result['org_name'];
+			$rows['OrgName'] = $result['org_name'];
+			$rows['OrgPhone'] = $result['org_phone'];
+			$rows['OrgAddress'] = $result['org_address'];
+			$rows['OrgAddress2'] = $result['org_address2'];
+			$rows['OrgCity'] = $result['org_city'];
+			$rows['OrgState'] = $result['org_state'];
+			$rows['OrgZip'] = $result['org_zip'];
+			$rows['OrgUrl'] = $result['org_url'];
+			$rows['OrgTaxID'] = $result['org_taxid'];
+			$rows['OrgDescription'] = $result['org_description'];
+			$rows['MoneyDonated'] = $result['money_raised'];
+			$rows['WebContact'] = $result['web_contact_name'];
+			$rows['WebContactEmail'] = $result['web_contact_email'];
+			$rows['WebContactPhone'] = $result['web_contact_phone'];
+			$rows['WebURL'] = $result['web_site_url'];
+			$rows['WebLinkLength'] = $result['web_link_length'];
+			$rows['WebComments'] = $result['web_explain'];
+			$rows['EventName'] = $result['event_name'];
+			$rows['EventLocation'] = $result['event_location'];
+			$rows['EventDate'] = $result['event_date'];
+			$rows['NumberOfAttendees'] = $result['no_attendees'];
+			$rows['EventDeliveryLocation'] = $result['event_delivery_location'];
+			$rows['EventAddress'] = $result['event_address'];
+			$rows['EventAddress2'] = $result['event_address2'];
+			$rows['EventCity'] = $result['event_city'];
+			$rows['EventState'] = $result['event_state'];
+			$rows['EventZip'] = $result['event_zip'];
+			$rows['EventDeliveryDate'] = $result['event_delivery_date'];
+			$rows['DonationContactName'] = $result['donation_contact_name'];
+			$rows['DonationEmail'] = $result['donation_email'];
+			$rows['DonationPhone'] = $result['donation_phone'];
+			$rows['DonationType'] = $result['donation_type'];
+			
+		
+		    $donationXML = format_xml_elements($rows);
+		
+		 $xmlstr = '<?xml version = "1.0" encoding = "UTF-8"?>' . "\n". "<donationRequest />";
+         $xml = new SimpleXMLExtend($xmlstr);
+
+         $donation_info = $xml->addChild('DonationInfo');
+	    	$donation_info->addChild('OrgName', $result['org_name']);
+			$donation_info->addChild('OrgPhone', $result['org_phone']);
+			$donation_info->addChild('OrgAddress', $result['org_address']);
+			$donation_info->addChild('OrgAddress2', $result['org_address2']);
+			$donation_info->addChild('OrgCity', $result['org_city']);
+			$donation_info->addChild('OrgState', $result['org_state']);
+			$donation_info->addChild('OrgZip', $result['org_zip']);
+			$donation_info->addChild('OrgUrl', $result['org_url']);
+			$donation_info->addChild('OrgTaxID', $result['org_taxid']);
+			$donation_info->addChild('OrgDescription', $result['org_description']);
+			$donation_info->addChild('MoneyDonated', $result['money_raised']);
+			$donation_info->addChild('WebContact', $result['web_contact_name']);
+			$donation_info->addChild('WebContactEmail', $result['web_contact_email']);
+			$donation_info->addChild('WebContactPhone', $result['web_contact_phone']);
+			$donation_info->addChild('WebURL', $result['web_site_url']);
+			$donation_info->addChild('WebLinkLength', $result['web_link_length']);
+			$donation_info->addChild('WebComments', $result['web_explain']);
+			$donation_info->addChild('EventName', $result['event_name']);
+			$donation_info->addChild('EventLocation', $result['event_location']);
+			$donation_info->addChild('EventDate', $result['event_date']);
+			$donation_info->addChild('NumberOfAttendees', $result['no_attendees']);
+			$donation_info->addChild('EventDeliveryLocation', $result['event_delivery_location']);
+			$donation_info->addChild('EventAddress', $result['event_address']);
+			$donation_info->addChild('EventAddress2', $result['event_address2']);
+			$donation_info->addChild('EventCity', $result['event_city']);
+			$donation_info->addChild('EventState', $result['event_state']);
+			$donation_info->addChild('EventZip', $result['event_zip']);
+			$donation_info->addChild('EventDeliveryDate', $result['event_delivery_date']);
+			$donation_info->addChild('DonationContactName', $result['donation_contact_name']);
+			$donation_info->addChild('DonationEmail', $result['donation_email']);
+			$donation_info->addChild('DonationPhone', $result['donation_phone']);
+			$donation_info->addChild('DonationType', $result['donation_type']);
+         
+		
+		$cash_result = db_select('provide_cash', 'd')
+			->fields('d',array('id','cash_amount','cash_comments'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+		$cash_row = array();
+		$cash_info = $xml->addChild('cashDonations');
+		foreach($cash_result as $cashd){
+			
+			      $cash_info->addChild('cash')
+			      ->addAttribute('CashAmount', $cashd->cash_amount)
+			      ->addCData('Comments', $cashd->cash_comments);
+			 $cash_row[] = array('CashAmount' => $cashd->cash_amount,'Comments' => $cashd->cash_comments);
+		}
+	    $cashXML = '';
+		foreach($cash_row as $row){
+				$cashXML .= '<cashRow>'.format_xml_elements($row).'</cashRow>';
+			}
+			$cashXML = '<cash>'.$cashXML.'</cash>';
+		
+		
+		
+		
+		$product_result = db_select('provide_products', 'd')
+			->fields('d',array('id','prod_qty','prod_brand','prod_name','prod_item_number','prod_comments'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+		$peod_row = array();
+		$product_info = $xml->addChild('productDonations');
+		$p = 0;
+		foreach($product_result as $productd){
+			
+			      $product_info->addChild('product')
+			      ->addAttribute('QTY', $productd->prod_qty)
+			      ->addAttribute('ProductBrand', $productd->prod_brand)
+			      ->addAttribute('ProductName', $productd->prod_name)
+				  ->addAttribute('ProductItemNumber', $productd->prod_item_number)
+			      ->addCData('Comments', $productd->prod_comments);
+			
+	    	$prod_row[] = array('QTY' => $productd->prod_qty,'ProductBrand' => $productd->prod_brand,'ProductName' => $productd->prod_name,'ProductItemNumber' => $productd->prod_item_number,'Comments' => $productd->prod_comments);
+			$p++;
+	   }
+	   $product_info = $xml->productDonations->addAttribute('QTY',$p);;
+	   $prodXML = '';
+	   foreach($prod_row as $row){
+			$prodXML .= '<product>'.format_xml_elements($row).'</product>';
+		}
+		$prodXML = '<products>'.$prodXML.'</products>';
+		
+		
+	
+		
+		
+		
+		$certificate_result = db_select('provide_gift_certificates', 'd')
+			->fields('d',array('id','cert_qty','cert_brand','cert_prod_type','cert_amount'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+			
+			
+			
+		$cert_row = array();
+		$certificate_info = $xml->addChild('certificateDonations');
+		$c = 0;
+		foreach($certificate_result as $certificate){
+			$certificate_info->addChild('certificate')
+			      ->addAttribute('QTY', $certificate->cert_qty)
+			      ->addAttribute('Brand', $certificate->cert_brand)
+			      ->addAttribute('ProductType', $certificate->cert_prod_type)
+				  ->addAttribute('CertAmount', $certificate->cert_amount);
+				 
+			
+			
+	    $cert_row[] = array('QTY' => $certificate->cert_qty,'Brand' => $certificate->cert_brand,'ProductType' => $certificate->cert_prod_type,'CertAmount' => $certificate->cert_amount);
+		$c++;
+		}
+		$certificate_info = $xml->certificateDonations->addAttribute('QTY',$c);
+		$certXML = '';
+		foreach($cert_row as $row){
+			$certXML .= '<certificate>'.format_xml_elements($row).'</certificate>';
+		}
+		$certXML = '<certificates>'.$certXML.'</certificates>';
+		
+	
+		
+		
+		//drupal_add_http_header("content-type: text/xml;charset=utf-8");
+		
+		
+		$FileName = date("d-m-y h:i") . '.xml';
+		
+     if($download){
+		header('content-type: text/xml;charset=utf-8'); 
+		header("Content-length: " . filesize($NewFile)); 
+		header('Content-Disposition: attachment; filename="' . $FileName . '"'); 
+		echo $xml->asXML();
+	}else{
+		$organization = preg_replace('/[^A-Za-z0-9]/', ' ', $organization);
+		$organization = str_replace(' ','',$organization);
+		//file_save_data($xml->asXML(),'public:///donations/donation.'.$organization.'.'.date("d-m-y-h-i").'.xml',FILE_EXISTS_REPLACE);
+		file_save_data($xml->asXML(),'private:///donations/donation.'.$organization.'.'.date("d-m-y-h-i").'.xml',FILE_EXISTS_REPLACE);
+	}	
+		global $base_url;
+
+	
+	    return ;
+}
+
+function donations_excel_item($did){
+
+	// Create new PHPExcel object
+	$objPHPExcel = new PHPExcel();
+	
+	$result = db_select('provide_donations', 'd')
+		->fields('d')
+		->condition('id',$did)
+		->execute()
+		->fetchAssoc();
+		$rows = array();
+		$header = array('Field','Value');
+		
+		$rows['OrgName'] = $result['org_name'];
+		$rows['OrgPhone'] = $result['org_phone'];
+		$rows['OrgAddress'] = $result['org_address'];
+		$rows['OrgAddress2'] = $result['org_address2'];
+		$rows['OrgCity'] = $result['org_city'];
+		$rows['OrgState'] = $result['org_state'];
+		$rows['OrgZip'] = $result['org_zip'];
+		$rows['OrgUrl'] = $result['org_url'];
+		$rows['OrgTaxID'] = $result['org_taxid'];
+		$rows['OrgDescription'] = $result['org_description'];
+		$rows['MoneyDonated'] = $result['money_raised'];
+		$rows['WebContact'] = $result['web_contact_name'];
+		$rows['WebContactEmail'] = $result['web_contact_email'];
+		$rows['WebContactPhone'] = $result['web_contact_phone'];
+		$rows['WebURL'] = $result['web_site_url'];
+		$rows['WebLinkLength'] = $result['web_link_length'];
+		$rows['WebComments'] = $result['web_explain'];
+		$rows['EventName'] = $result['event_name'];
+		$rows['EventLocation'] = $result['event_location'];
+		$rows['EventDate'] = $result['event_date'];
+		$rows['NumberOfAttendees'] = $result['no_attendees'];
+		$rows['EventDeliveryLocation'] = $result['event_delivery_location'];
+		$rows['EventAddress'] = $result['event_address'];
+		$rows['EventAddress2'] = $result['event_address2'];
+		$rows['EventCity'] = $result['event_city'];
+		$rows['EventState'] = $result['event_state'];
+		$rows['EventZip'] = $result['event_zip'];
+		$rows['EventDeliveryDate'] = $result['event_delivery_date'];
+		$rows['DonationContactName'] = $result['donation_contact_name'];
+		$rows['DonationEmail'] = $result['donation_email'];
+		$rows['DonationPhone'] = $result['donation_phone'];
+		$rows['DonationType'] = $result['donation_type'];
+	
+	
+	// Set document properties
+	$objPHPExcel->getProperties()->setCreator("Provide Commerce")
+								 ->setLastModifiedBy("Provide Commerce")
+								 ->setTitle($rows['OrgName'])
+								 ->setSubject($rows['OrgName'])
+								 ->setDescription($rows['OrgName'])
+								 ->setKeywords("Donation Request")
+								 ->setCategory("Donations");
+	
+	
+	// Organization Sheet
+	$organizationHeaders = array(
+		'Organization Name',
+		'Organization Phone',
+		'Organization Address',
+		'Organization Address 2',
+		'Organization City',
+		'Organization State',
+		'Organization ZIP',
+		'Organization URL',
+		'Organization Tax ID',
+		'Organization Description',
+		'Organization Percentage Donated',
+		'Web Contact',
+		'Web Contact Email',
+		'Web Contact Phone',
+		'Web Display Provide URL',
+		'Web Display Provide URL Time',
+		'Event Name',
+		'Event Location',
+		'Event Date',
+		'Event Attendees',
+		'Event Delivery Address',
+		'Event Delivery Address 2',
+		'Event City',
+		'Event State',
+		'Event ZIP',
+		'Event Deliver Date',
+		'Donation Contact Name',
+		'Donation Contact Email',
+		'Donation Contact Phone',
+		'Donation Contact Type');
+	
+	// Add some data
+	$objPHPExcel->setActiveSheetIndex(0)
+				->setTitle('Organization')
+				->fromArray($organizationHeaders, null, 'A1')
+				->fromArray($rows, null, 'A2');
+
+	// Format the filename
+	$filename = str_replace(' ','_',$rows['OrgName']);
+	
+	// Redirect output to a client’s web browser (Excel5)
+	header('Content-Type: application/vnd.ms-excel');
+	header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+	header('Cache-Control: max-age=0');
+	
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+	$objWriter->save('php://output');
+
+
+	/*
+	$result = db_select('provide_donations', 'd')
+		->fields('d')
+		->condition('id',$did)
+		->execute()
+		->fetchAssoc();
+		$rows = array();
+		$xml = array();
+		$header = array('Field','Value');
+		
+			$rows['OrgName'] = $result['org_name'];
+			$rows['OrgPhone'] = $result['org_phone'];
+			$rows['OrgAddress'] = $result['org_address'];
+			$rows['OrgAddress2'] = $result['org_address2'];
+			$rows['OrgCity'] = $result['org_city'];
+			$rows['OrgState'] = $result['org_state'];
+			$rows['OrgZip'] = $result['org_zip'];
+			$rows['OrgUrl'] = $result['org_url'];
+			$rows['OrgTaxID'] = $result['org_taxid'];
+			$rows['OrgDescription'] = $result['org_description'];
+			$rows['MoneyDonated'] = $result['money_raised'];
+			$rows['WebContact'] = $result['web_contact_name'];
+			$rows['WebContactEmail'] = $result['web_contact_email'];
+			$rows['WebContactPhone'] = $result['web_contact_phone'];
+			$rows['WebURL'] = $result['web_site_url'];
+			$rows['WebLinkLength'] = $result['web_link_length'];
+			$rows['WebComments'] = $result['web_explain'];
+			$rows['EventName'] = $result['event_name'];
+			$rows['EventLocation'] = $result['event_location'];
+			$rows['EventDate'] = $result['event_date'];
+			$rows['NumberOfAttendees'] = $result['no_attendees'];
+			$rows['EventDeliveryLocation'] = $result['event_delivery_location'];
+			$rows['EventAddress'] = $result['event_address'];
+			$rows['EventAddress2'] = $result['event_address2'];
+			$rows['EventCity'] = $result['event_city'];
+			$rows['EventState'] = $result['event_state'];
+			$rows['EventZip'] = $result['event_zip'];
+			$rows['EventDeliveryDate'] = $result['event_delivery_date'];
+			$rows['DonationContactName'] = $result['donation_contact_name'];
+			$rows['DonationEmail'] = $result['donation_email'];
+			$rows['DonationPhone'] = $result['donation_phone'];
+			$rows['DonationType'] = $result['donation_type'];
+			
+		
+		    $donationXML = format_xml_elements($rows);
+		
+		 $xmlstr = '<?xml version = "1.0" encoding = "UTF-8"?>' . "\n". "<donationRequest />";
+         $xml = new SimpleXMLExtend($xmlstr);
+
+         $donation_info = $xml->addChild('DonationInfo');
+	    	$donation_info->addChild('OrgName', $result['org_name']);
+			$donation_info->addChild('OrgPhone', $result['org_phone']);
+			$donation_info->addChild('OrgAddress', $result['org_address']);
+			$donation_info->addChild('OrgAddress2', $result['org_address2']);
+			$donation_info->addChild('OrgCity', $result['org_city']);
+			$donation_info->addChild('OrgState', $result['org_state']);
+			$donation_info->addChild('OrgZip', $result['org_zip']);
+			$donation_info->addChild('OrgUrl', $result['org_url']);
+			$donation_info->addChild('OrgTaxID', $result['org_taxid']);
+			$donation_info->addChild('OrgDescription', $result['org_description']);
+			$donation_info->addChild('MoneyDonated', $result['money_raised']);
+			$donation_info->addChild('WebContact', $result['web_contact_name']);
+			$donation_info->addChild('WebContactEmail', $result['web_contact_email']);
+			$donation_info->addChild('WebContactPhone', $result['web_contact_phone']);
+			$donation_info->addChild('WebURL', $result['web_site_url']);
+			$donation_info->addChild('WebLinkLength', $result['web_link_length']);
+			$donation_info->addChild('WebComments', $result['web_explain']);
+			$donation_info->addChild('EventName', $result['event_name']);
+			$donation_info->addChild('EventLocation', $result['event_location']);
+			$donation_info->addChild('EventDate', $result['event_date']);
+			$donation_info->addChild('NumberOfAttendees', $result['no_attendees']);
+			$donation_info->addChild('EventDeliveryLocation', $result['event_delivery_location']);
+			$donation_info->addChild('EventAddress', $result['event_address']);
+			$donation_info->addChild('EventAddress2', $result['event_address2']);
+			$donation_info->addChild('EventCity', $result['event_city']);
+			$donation_info->addChild('EventState', $result['event_state']);
+			$donation_info->addChild('EventZip', $result['event_zip']);
+			$donation_info->addChild('EventDeliveryDate', $result['event_delivery_date']);
+			$donation_info->addChild('DonationContactName', $result['donation_contact_name']);
+			$donation_info->addChild('DonationEmail', $result['donation_email']);
+			$donation_info->addChild('DonationPhone', $result['donation_phone']);
+			$donation_info->addChild('DonationType', $result['donation_type']);
+         
+		
+		$cash_result = db_select('provide_cash', 'd')
+			->fields('d',array('id','cash_amount','cash_comments'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+		$cash_row = array();
+		$cash_info = $xml->addChild('cashDonations');
+		foreach($cash_result as $cashd){
+			
+			      $cash_info->addChild('cash')
+			      ->addAttribute('CashAmount', $cashd->cash_amount)
+			      ->addCData('Comments', $cashd->cash_comments);
+			 $cash_row[] = array('CashAmount' => $cashd->cash_amount,'Comments' => $cashd->cash_comments);
+		}
+	    $cashXML = '';
+		foreach($cash_row as $row){
+				$cashXML .= '<cashRow>'.format_xml_elements($row).'</cashRow>';
+			}
+			$cashXML = '<cash>'.$cashXML.'</cash>';
+		
+		
+		
+		
+		$product_result = db_select('provide_products', 'd')
+			->fields('d',array('id','prod_qty','prod_brand','prod_name','prod_item_number','prod_comments'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+		$peod_row = array();
+		$product_info = $xml->addChild('productDonations');
+		foreach($product_result as $productd){
+			
+			      $product_info->addChild('product')
+			      ->addAttribute('QTY', $productd->prod_qty)
+			      ->addAttribute('ProductBrand', $productd->prod_brand)
+			      ->addAttribute('ProductName', $productd->prod_name)
+				  ->addAttribute('ProductItemNumber', $productd->prod_item_number)
+			      ->addCData('Comments', $productd->prod_comments);
+			
+	    	$prod_row[] = array('QTY' => $productd->prod_qty,'ProductBrand' => $productd->prod_brand,'ProductName' => $productd->prod_name,'ProductItemNumber' => $productd->prod_item_number,'Comments' => $productd->prod_comments);
+	   }
+	   $prodXML = '';
+	   foreach($prod_row as $row){
+			$prodXML .= '<product>'.format_xml_elements($row).'</product>';
+		}
+		$prodXML = '<products>'.$prodXML.'</products>';
+		
+		
+	
+		
+		
+		
+		$certificate_result = db_select('provide_gift_certificates', 'd')
+			->fields('d',array('id','cert_qty','cert_brand','cert_prod_type','cert_amount'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+			
+			
+			
+		$cert_row = array();
+		$certificate_info = $xml->addChild('certificateDonations');
+		foreach($certificate_result as $certificate){
+			$certificate_info->addChild('certificate')
+			      ->addAttribute('QTY', $certificate->cert_qty)
+			      ->addAttribute('Brand', $certificate->cert_brand)
+			      ->addAttribute('ProductType', $certificate->cert_prod_type)
+				  ->addAttribute('CertAmount', $certificate->cert_amount);
+			
+			
+	    $cert_row[] = array('QTY' => $certificate->cert_qty,'Brand' => $certificate->cert_brand,'ProductType' => $certificate->cert_prod_type,'CertAmount' => $certificate->cert_amount);
+		}
+		$certXML = '';
+		foreach($cert_row as $row){
+			$certXML .= '<certificate>'.format_xml_elements($row).'</certificate>';
+		}
+		$certXML = '<certificates>'.$certXML.'</certificates>';
+		
+	
+		
+		
+		//drupal_add_http_header("content-type: text/xml;charset=utf-8");
+		
+		
+		$FileName = date("d-m-y h:i") . '.xml';
+		
+
+		header('content-type: text/xml;charset=utf-8'); 
+		header("Content-length: " . filesize($NewFile)); 
+		header('Content-Disposition: attachment; filename="' . $FileName . '"'); 
+		echo $xml->asXML();
+		
+		*/
+		global $base_url;
+
+	
+	    return;
+}
+
+function provide_donation_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'thankyou':
+      // note: data can be passed to this function in the $params array
+      $message['subject'] = t('Provide Donation Request');
+      $message['body'][] = t($params['message']);
+      break;  
+   	case 'donation':  
+      //donations_xml_item($_SESSION['submit_id'], false);
+      $donation = file_save_data($params['file'],'public://donation'.date("d-m-y-h-i").'.xml',FILE_EXISTS_REPLACE);
+     
+      $file = DRUPAL_ROOT . '/sites/default/files/donation.xml';
+      $attachments = array(
+	  'filecontent' => file_get_contents($file),
+	  'filename' => $donation->filename,
+	  'filemime' => $donation->filemime,
+	  );
+
+      // note: data can be passed to this function in the $params array
+      $message['subject'] = t('Site Donation Request');
+      $message['body'][] = t($params['message']);
+      $message['params']['attachments'][] = $attachments;
+	  break;  
+  }
+}
+
+
+function donations_xml_item_save($did){
+	$result = db_select('provide_donations', 'd')
+		->fields('d')
+		->condition('id',$did)
+		->execute()
+		->fetchAssoc();
+		$rows = array();
+		$xml = array();
+		$header = array('Field','Value');
+		
+			$rows['OrgName'] = $result['org_name'];
+			$rows['OrgPhone'] = $result['org_phone'];
+			$rows['OrgAddress'] = $result['org_address'];
+			$rows['OrgAddress2'] = $result['org_address2'];
+			$rows['OrgCity'] = $result['org_city'];
+			$rows['OrgState'] = $result['org_state'];
+			$rows['OrgZip'] = $result['org_zip'];
+			$rows['OrgUrl'] = $result['org_url'];
+			$rows['OrgTaxID'] = $result['org_taxid'];
+			$rows['OrgDescription'] = $result['org_description'];
+			$rows['MoneyDonated'] = $result['money_raised'];
+			$rows['WebContact'] = $result['web_contact_name'];
+			$rows['WebContactEmail'] = $result['web_contact_email'];
+			$rows['WebContactPhone'] = $result['web_contact_phone'];
+			$rows['WebURL'] = $result['web_site_url'];
+			$rows['WebLinkLength'] = $result['web_link_length'];
+			$rows['WebComments'] = $result['web_explain'];
+			$rows['EventName'] = $result['event_name'];
+			$rows['EventLocation'] = $result['event_location'];
+			$rows['EventDate'] = $result['event_date'];
+			$rows['NumberOfAttendees'] = $result['no_attendees'];
+			$rows['EventDeliveryLocation'] = $result['event_delivery_location'];
+			$rows['EventAddress'] = $result['event_address'];
+			$rows['EventAddress2'] = $result['event_address2'];
+			$rows['EventCity'] = $result['event_city'];
+			$rows['EventState'] = $result['event_state'];
+			$rows['EventZip'] = $result['event_zip'];
+			$rows['EventDeliveryDate'] = $result['event_delivery_date'];
+			$rows['DonationContactName'] = $result['donation_contact_name'];
+			$rows['DonationEmail'] = $result['donation_email'];
+			$rows['DonationPhone'] = $result['donation_phone'];
+			$rows['DonationType'] = $result['donation_type'];
+			
+		
+		    $donationXML = format_xml_elements($rows);
+		
+		 $xmlstr = '<?xml version = "1.0" encoding = "UTF-8"?>' . "\n". "<donationRequest />";
+         $xml = new SimpleXMLExtend($xmlstr);
+
+         $donation_info = $xml->addChild('DonationInfo');
+	    	$donation_info->addChild('OrgName', $result['org_name']);
+			$donation_info->addChild('OrgPhone', $result['org_phone']);
+			$donation_info->addChild('OrgAddress', $result['org_address']);
+			$donation_info->addChild('OrgAddress2', $result['org_address2']);
+			$donation_info->addChild('OrgCity', $result['org_city']);
+			$donation_info->addChild('OrgState', $result['org_state']);
+			$donation_info->addChild('OrgZip', $result['org_zip']);
+			$donation_info->addChild('OrgUrl', $result['org_url']);
+			$donation_info->addChild('OrgTaxID', $result['org_taxid']);
+			$donation_info->addChild('OrgDescription', $result['org_description']);
+			$donation_info->addChild('MoneyDonated', $result['money_raised']);
+			$donation_info->addChild('WebContact', $result['web_contact_name']);
+			$donation_info->addChild('WebContactEmail', $result['web_contact_email']);
+			$donation_info->addChild('WebContactPhone', $result['web_contact_phone']);
+			$donation_info->addChild('WebURL', $result['web_site_url']);
+			$donation_info->addChild('WebLinkLength', $result['web_link_length']);
+			$donation_info->addChild('WebComments', $result['web_explain']);
+			$donation_info->addChild('EventName', $result['event_name']);
+			$donation_info->addChild('EventLocation', $result['event_location']);
+			$donation_info->addChild('EventDate', $result['event_date']);
+			$donation_info->addChild('NumberOfAttendees', $result['no_attendees']);
+			$donation_info->addChild('EventDeliveryLocation', $result['event_delivery_location']);
+			$donation_info->addChild('EventAddress', $result['event_address']);
+			$donation_info->addChild('EventAddress2', $result['event_address2']);
+			$donation_info->addChild('EventCity', $result['event_city']);
+			$donation_info->addChild('EventState', $result['event_state']);
+			$donation_info->addChild('EventZip', $result['event_zip']);
+			$donation_info->addChild('EventDeliveryDate', $result['event_delivery_date']);
+			$donation_info->addChild('DonationContactName', $result['donation_contact_name']);
+			$donation_info->addChild('DonationEmail', $result['donation_email']);
+			$donation_info->addChild('DonationPhone', $result['donation_phone']);
+			$donation_info->addChild('DonationType', $result['donation_type']);
+         
+		
+		$cash_result = db_select('provide_cash', 'd')
+			->fields('d',array('id','cash_amount','cash_comments'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+		$cash_row = array();
+		$cash_info = $xml->addChild('cashDonations');
+		foreach($cash_result as $cashd){
+			
+			      $cash_info->addChild('cash')
+			      ->addAttribute('CashAmount', $cashd->cash_amount)
+			      ->addCData('Comments', $cashd->cash_comments);
+			 $cash_row[] = array('CashAmount' => $cashd->cash_amount,'Comments' => $cashd->cash_comments);
+		}
+	    $cashXML = '';
+		foreach($cash_row as $row){
+				$cashXML .= '<cashRow>'.format_xml_elements($row).'</cashRow>';
+			}
+			$cashXML = '<cash>'.$cashXML.'</cash>';
+		
+		
+		
+		
+		$product_result = db_select('provide_products', 'd')
+			->fields('d',array('id','prod_qty','prod_brand','prod_name','prod_item_number','prod_comments'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+		$peod_row = array();
+		$product_info = $xml->addChild('productDonations');
+		foreach($product_result as $productd){
+			
+			      $product_info->addChild('product')
+			      ->addAttribute('QTY', $productd->prod_qty)
+			      ->addAttribute('ProductBrand', $productd->prod_brand)
+			      ->addAttribute('ProductName', $productd->prod_name)
+				  ->addAttribute('ProductItemNumber', $productd->prod_item_number)
+			      ->addCData('Comments', $productd->prod_comments);
+			
+	    	$prod_row[] = array('QTY' => $productd->prod_qty,'ProductBrand' => $productd->prod_brand,'ProductName' => $productd->prod_name,'ProductItemNumber' => $productd->prod_item_number,'Comments' => $productd->prod_comments);
+	   }
+	   $prodXML = '';
+	   foreach($prod_row as $row){
+			$prodXML .= '<product>'.format_xml_elements($row).'</product>';
+		}
+		$prodXML = '<products>'.$prodXML.'</products>';
+		
+		
+	
+		
+		
+		
+		$certificate_result = db_select('provide_gift_certificates', 'd')
+			->fields('d',array('id','cert_qty','cert_brand','cert_prod_type','cert_amount'))
+			->condition('did',$did)
+			->execute()
+			->fetchAllAssoc('id');
+			
+			
+			
+		$cert_row = array();
+		$certificate_info = $xml->addChild('certificateDonations');
+		foreach($certificate_result as $certificate){
+			$certificate_info->addChild('certificate')
+			      ->addAttribute('QTY', $certificate->cert_qty)
+			      ->addAttribute('Brand', $certificate->cert_brand)
+			      ->addAttribute('ProductType', $certificate->cert_prod_type)
+				  ->addAttribute('CertAmount', $certificate->cert_amount);
+			
+			
+	    $cert_row[] = array('QTY' => $certificate->cert_qty,'Brand' => $certificate->cert_brand,'ProductType' => $certificate->cert_prod_type,'CertAmount' => $certificate->cert_amount);
+		}
+		$certXML = '';
+		foreach($cert_row as $row){
+			$certXML .= '<certificate>'.format_xml_elements($row).'</certificate>';
+		}
+		$certXML = '<certificates>'.$certXML.'</certificates>';
+		
+	
+		
+		
+		//drupal_add_http_header("content-type: text/xml;charset=utf-8");
+		
+		
+		$FileName = date("d-m-y h:i") . '.xml';
+		
+        //file_save_data($params['file'],'public://donation.xml',FILE_EXISTS_REPLACE);
+
+		header('content-type: text/xml;charset=utf-8'); 
+		header("Content-length: " . filesize($NewFile)); 
+		header('Content-Disposition: attachment; filename="' . $FileName . '"'); 
+		echo $xml->asXML();
+		
+		
+		global $base_url;
+
+	
+	    return ;
+}
+
+
+
+	

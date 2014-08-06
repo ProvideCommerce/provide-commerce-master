@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the pc context feature.
+ */
+
+include_once 'pc_context.features.inc';

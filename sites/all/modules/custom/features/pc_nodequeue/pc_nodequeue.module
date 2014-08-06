@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the pc nodequeue feature.
+ */
+
+include_once 'pc_nodequeue.features.inc';

@@ -1,0 +1,198 @@
+body {
+  padding:0;
+  margin:0;
+  text-align:center;
+  font-family:"Arial", sans-serif;
+  background-color:#fff;
+  background-image: url("http://corp.prvd.com/MVV/_assets_/bgmain.jpg");
+    background-repeat: repeat-x;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  margin:0;
+  padding:0;
+}
+
+.banner {
+	margin-left: -463px;
+	padding: 0;
+	width: 926px;
+	height: 1073px;
+	background: url(/Perc/oneyear/images/wowbanner.png) no-repeat top center;
+	position: absolute;
+	top: 0;
+	z-index: 0;
+	left: 50%;
+	}
+
+#container {
+  width:900px;
+  text-align:left;
+  margin: auto;
+  padding-top: 350px;
+  position: relative;
+}
+
+#container h3 {
+	font-size: 22px;
+	margin-bottom:10px;
+	font-family:arial, sans-serif;
+	font-weight:normal;
+	color:#fff;
+	text-align:left;
+	padding: 8px;
+	text-shadow: 1px 1px 1px #000;
+	border-bottom: 1px solid #eee;
+}
+
+#header {
+	margin-bottom:5px;
+	padding:2em 0;
+}
+
+#header h1 {
+	text-align:center;
+	font-weight:normal;
+	font-size:3em;
+	margin-top:5px;
+	line-height:1em;
+}
+
+#info {
+	color:#666;
+	font-style:italic;
+	position:relative;
+	left:45%;
+	width:40%;
+}
+
+#jb_message {
+	color:#fff;
+	text-align:center;
+	margin-bottom:0.5em;
+}
+
+#jb_message.error {
+	background-color:#c00;
+}
+
+#jb_message.confirm {
+  background-color:#360;
+}
+
+#jb_message p {
+  margin:0;
+  padding:0.5em;
+  font-size:1.6em;
+}
+
+#primary {
+  float:right;
+}
+
+#secondary {
+	width:590px;
+  float:left;
+  margin-bottom:1em;
+}
+
+#jb_addComment{
+	width:255px;
+}
+
+#jb_addComment label {
+  display:block;
+  font-weight:bold;
+  font-size:0.9em;
+}
+
+#jb_addComment input, #jb_addComment textarea{
+	font-size:0.8em;
+	font-family:arial, sans-serif;
+	width:98%;
+	margin-bottom:5px;
+	padding-left:2px;
+}
+
+#jb_addComment textarea{
+	height:80px;
+}
+
+#jb_addComment .button{
+	font-size:1.3em;
+}
+
+#jb_addComment fieldset{
+  border:0;
+  margin:0;
+  padding:0;
+}
+
+#jb_comments{
+}
+
+.comment{
+	width:580px;
+	background:#f8f8f8;
+	border: solid 1px #ddd;
+	margin-bottom:15px;
+	overflow:hidden;
+	padding: 10px;
+-webkit-box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, .1);
+box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, .1);
+}
+
+.comment .header {
+	font-weight:bold;
+	border-bottom: solid 1px #d5d5d5;
+	padding:10px;
+	color: #404040;
+	font-size: 16px;
+}
+
+.comment .header a{
+	color:#000;
+}
+
+.comment .header a.delete{
+	float:right;
+}
+
+.comment .content {
+	padding:5px;
+	line-height:1.5em;
+	font-family: Georgia;
+	font-size: 14px;
+	color: #646464;
+}
+
+.comment .date {
+	font-size:12px;
+	text-align:right;
+	color:#999;
+	padding-right:4px;
+}
+
+#footer{
+	clear:both;
+	text-align:center;
+	padding-top:10px;
+	font-size:0.8em;
+	border-top:solid 2em #000;
+}
+
+#footer a{
+	color:#06c;
+}
+
+#footer a:hover{
+	text-decoration:none;
+}
+
+.required{
+	color:#f00;
+}
+
+#jb_addComment .hidden, .hidden{
+	display:none;
+}

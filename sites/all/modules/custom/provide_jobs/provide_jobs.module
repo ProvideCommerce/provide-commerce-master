@@ -1,0 +1,592 @@
+<?php
+function provide_jobs_menu() {
+	$items = array();
+	
+	$items['join-our-team/careers/%/%'] = array(
+		'page callback' => 'job_results',
+		'page arguments' => array(2,3),
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+	
+	$items['join-our-team/careers'] = array(
+		'page callback' => 'provide_jobs_all',
+		//'page arguments' => array(2,3),
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+	
+	$items['join-our-team/careers/view/%'] = array(
+		'page callback' => 'job_view',
+		'page arguments' => array(3),
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+	
+	$items['join-our-team/apply'] = array(
+		'page callback' => 'provide_jobs_apply',
+		//'page arguments' => array(2,3),
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+	
+	$items['join-our-team/apply/view/%'] = array(
+		'page callback' => 'job_view',
+		'page arguments' => array(3),
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+	
+	$items['join-our-team/careers/alerts'] = array(
+		'page callback' => 'provide_jobs_signup_alerts',
+		//'page arguments' => array(3),
+		'access callback' => TRUE,
+		'type' => MENU_CALLBACK,
+	);
+	
+	return $items;
+}
+
+
+function provide_jobs_block_info() {
+  $blocks = array();
+  $blocks['jobsearch-block'] = array(
+    'info' => t('Custom: Job Search Block'),
+  );
+  $blocks['joblinksearch-block'] = array(
+    'info' => t('Custom: Job Search by Link'),
+  );
+  return $blocks;
+}
+
+
+// create the call back for a block
+
+/**
+ * Implementation of hook_block_view().
+ */
+function provide_jobs_block_view($delta='') {
+    $block = array();
+    switch ($delta) {
+        case 'jobsearch-block':
+            $block['subject'] = '';
+            $block['content'] = provide_jobs_search_widget();
+        break; 
+      	case 'joblinksearch-block':
+            $block['subject'] = '';
+            $block['content'] = provide_jobs_link_search();
+        break;
+    }
+    return $block;
+}
+
+
+function provide_jobs_search_widget(){
+   
+ 
+  	//    print drupal_render(drupal_get_form('provide_jobs_form'));
+  	// die();
+	return drupal_get_form('provide_jobs_form');
+
+
+}
+
+
+function provide_jobs_form($form, &$form_state) {
+	
+	
+	//$nlocations = &drupal_static(__FUNCTION__);
+	//$ncategories = &drupal_static(__FUNCTION__);
+	
+	
+	
+//	if ((!isset($nlocations)) || (!isset($ncategories))) {
+	    //if (($location_cache = cache_get('provide_jobs_locations')) && ($category_cache = cache_get('provide_jobs_categories'))) {
+	     // $nlocations = $location_cache->data;
+	     // $ncategories = $category_cache->data;
+	   // }
+	    //else {
+		     $feed_url = 'http://www.jobvite.com/CompanyJobs/Xml.aspx?c=qRY9VfwD';
+
+			  	$locations = array();
+				$categories = array();
+		        $nlocations = array();
+				$ncategories = array();
+		        $nlocations[0] = 'Select';
+		        $ncategories[0] = 'Select';
+
+
+			 $result = drupal_http_request($feed_url);
+
+
+
+			    if ($result->data) {
+
+					if (!$result->data) {
+					    watchdog("provide_jobs", "Could not process feed for jobs", WATCHDOG_ERROR);
+					    return;
+					  }
+
+					$doc = DOMDocument::loadXML($result->data);
+
+					$xp = new DOMXpath($doc);
+
+					$jobs = $xp->query('/result/job');
+
+					if ($jobs->length > 0) {
+						for ($i = 0; $i < $jobs->length; $i++) {
+							$locations[] = _provide_jobs_get_node_value('location', $jobs->item($i), $xp);
+							$categories[] = _provide_jobs_get_node_value('category', $jobs->item($i), $xp);
+
+						}
+					}
+
+					$locations = array_unique($locations, SORT_REGULAR);
+					$locations = array_splice($locations,0,count($locations));
+					foreach($locations as $key=>$value){
+					    $nlocations[$value] = $value;
+					}
+
+
+					$categories = array_unique($categories, SORT_REGULAR);
+					$categories = array_splice($categories,0,count($categories));
+
+					foreach($categories as $key=>$value){
+					    $ncategories[$value] = $value;
+					}
+
+
+			    }
+			 //cache_set('provide_jobs_locations', $nlocations, 'cache');
+			 //cache_set('provide_jobs_categories', $ncategories, 'cache');
+		//}
+//	}
+	
+	
+	
+	
+	$form['#prefix'] = '<div id="jobsearch-form-wrapper"><h2>What\'s your dream career?</h2>';
+	$form['#suffix'] = '</div>';
+	$form['category'] = array(
+		'#title' => t('by department'),
+		'#attributes' => array('onchange' => "form.submit('category')"),
+		'#type' => 'select',
+		'#options' => $ncategories,
+	);
+	$form['location'] = array(
+		'#title' => t('by location'),
+		'#attributes' => array('onchange' => "form.submit('location')"),
+		'#type' => 'select',
+		'#options' => $nlocations,
+	);
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Search')
+	);
+	
+	return $form;	
+}
+
+function provide_jobs_form_submit($form, &$form_state){
+	drupal_goto('join-our-team/careers/'.urlencode($form_state['values']['location']).'/'.urlencode($form_state['values']['category']));
+}
+
+
+function job_results($location = 0, $category = 0){
+	$location = urldecode ( $location);
+	$category = urldecode ( $category);
+	$category = str_replace("|","/",$category);
+	$location = str_replace("|","/",$location);
+
+	$feed_url = 'http://www.jobvite.com/CompanyJobs/Xml.aspx?c=qRY9VfwD';
+
+	//$result = drupal_http_request($feed_url);
+    
+    $xmlStr = file_get_contents($feed_url); 
+	$xml = new SimpleXMLElement($xmlStr);
+    
+    //$res = $xml->xpath("job/location[. ='$location']/parent::*"); 
+    
+    //$query = "job/location[. ='$location']/parent::*";
+    //$query = "job/category[. ='$category']/parent::*";
+
+    if(($category == '0') && ($location <> '0')):
+	  $query = "//*[location = '$location']";
+	elseif(($location == '0') && ($category <> '0')):
+	  $query = "//*[category = '$category']";
+	elseif(($location == '0') && ($category == '0')):
+	  $query = "//*";
+	else:
+      $query = "//*[category = '$category' and location = '$location']";
+    endif;
+    
+    
+    $res = $xml->xpath($query);
+    $html = '<div id="job-search-results"><p class="intro">Click on any of the links below to see the opportunity details and description.</p>';
+	foreach($res as $job){
+		if($job->id){
+		$html .= '<div class="job">';
+		$location = $job->location;
+		$location = explode(', ',$location);
+		$location = $location[0].', '.$location[1];
+		$html .= "<div class='location'>".$location."</div>";
+		$html .= "<div class='title'><a href='/join-our-team/careers/view/".$job->id."'>".$job->title."</a></div>";
+		
+		$html .= "<div class='category'>".$job->category."</div>";
+		$html .= '</div>';
+		}
+	}
+	$html .= '</div>';
+
+
+	
+	return $html;
+}
+
+function job_view($job_id){
+	global $base_url;
+	//http://www.jobvite.com/CompanyJobs/Careers.aspx?c=q6X9VfwR&cs=9Cb9VfwB&page=JobDescPopUp
+	//http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qRY9VfwD&cs=943aVfwW
+	$path = drupal_get_path('module', 'provide_jobs');
+	$path =  $base_url.'/'.$path.'/framesize.html';
+	$joburl = 'http://hire.jobvite.com/CompanyJobs/Job.aspx?c=qRY9VfwD&j='.$job_id;
+	//$joburl = 'http://www.jobvite.com/CompanyJobs/Careers.aspx?c=qRY9VfwD&cs='.$job_id.'&page=JobDescPopUp';
+	
+	
+	$iframe = "<iframe id=\"jobviteframe\" src=\"".$joburl."&jvresize=".$path."\" width=\"100%\" height=\"500px\" scrolling=\"no\" frameborder=\"0\" allowtransparency =\"true\">Sorry, iframes are not supported.</iframe>
+	<script type=\"text/javascript\">
+	      var l = location.href;
+	      var args = '';
+	      var k = '';
+	      var iStart = l.indexOf('?jvk=');
+	      if (iStart == -1) iStart = l.indexOf('&jvk=');
+	      if (iStart != -1) {
+	            iStart += 5;
+	            var iEnd = l.indexOf('&', iStart);
+	            if (iEnd == -1) iEnd = l.length;
+	            k = l.substring(iStart, iEnd);
+	      }
+	      iStart = l.indexOf('?jvi=');
+	      if (iStart == -1) iStart = l.indexOf('&jvi=');
+	      if (iStart != -1) {
+	            iStart += 5;
+	            var iEnd = l.indexOf('&', iStart);
+	            if (iEnd == -1) iEnd = l.length;
+	            args += '&j=' + l.substring(iStart, iEnd);
+	            if (!k.length) args += '&k=Job';
+	            var iStart = l.indexOf('?jvs=');
+	            if (iStart == -1) iStart = l.indexOf('&jvs=');
+	            if (iStart != -1){
+	                  iStart += 5;
+	                  var iEnd = l.indexOf('&', iStart);
+	                  if (iEnd == -1) iEnd = l.length;
+	                  args += '&s=' + l.substring(iStart, iEnd);
+	            }
+	      }
+	      if (k.length) args += '&k=' + k;
+	      if (args.length) document.getElementById('jobviteframe').src += args;
+	      function resizeFrame(height, scrollToTop) {
+	            if (scrollToTop) window.scrollTo(0, 0);
+	            var oFrame = document.getElementById('jobviteframe');
+	            if (oFrame) oFrame.height = height;
+	      }
+	</script>";
+	
+	
+	return $iframe;
+}
+
+function _provide_jobs_get_node_value($name, &$parent, &$xp) {
+  $element = $xp->evaluate($name, $parent);
+  if ($element->length > 0) {
+    return $element->item(0)->nodeValue;
+  }
+  return '';
+}
+
+function provide_jobs_all(){
+	//http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qRY9VfwD&jvprefix=http%3a%2f%2fprovide-commerce.meaclients.com&jvresize=http%3a%2f%2fprovide-commerce.meaclients.com%2fsites%2fall%2fmodules%2fcustom%2fprovide_jobs%2fframesize.html&page=alljobs
+	
+	global $base_url;
+	
+	$path = drupal_get_path('module', 'provide_jobs');
+	$path =  $base_url.'/'.$path.'/framesize.html';
+	//$joburl = 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qRY9VfwD&page=alljobs';
+	$joburl = 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qRY9VfwD&cs=943aVfwW&nl=0'; //new url
+	
+	$iframe = "<iframe id=\"jobviteframe\" src=\"".$joburl."&jvresize=".$path."\" width=\"100%\" height=\"500px\" scrolling=\"no\" frameborder=\"0\" allowtransparency =\"true\">Sorry, iframes are not supported.</iframe>
+	<script type=\"text/javascript\">
+	      var l = location.href;
+	      var args = '';
+	      var k = '';
+	      var iStart = l.indexOf('?jvk=');
+	      if (iStart == -1) iStart = l.indexOf('&jvk=');
+	      if (iStart != -1) {
+	            iStart += 5;
+	            var iEnd = l.indexOf('&', iStart);
+	            if (iEnd == -1) iEnd = l.length;
+	            k = l.substring(iStart, iEnd);
+	      }
+	      iStart = l.indexOf('?jvi=');
+	      if (iStart == -1) iStart = l.indexOf('&jvi=');
+	      if (iStart != -1) {
+	            iStart += 5;
+	            var iEnd = l.indexOf('&', iStart);
+	            if (iEnd == -1) iEnd = l.length;
+	            args += '&j=' + l.substring(iStart, iEnd);
+	            if (!k.length) args += '&k=Job';
+	            var iStart = l.indexOf('?jvs=');
+	            if (iStart == -1) iStart = l.indexOf('&jvs=');
+	            if (iStart != -1){
+	                  iStart += 5;
+	                  var iEnd = l.indexOf('&', iStart);
+	                  if (iEnd == -1) iEnd = l.length;
+	                  args += '&s=' + l.substring(iStart, iEnd);
+	            }
+	      }
+	      if (k.length) args += '&k=' + k;
+	      if (args.length) document.getElementById('jobviteframe').src += args;
+	      function resizeFrame(height, scrollToTop) {
+	            if (scrollToTop) window.scrollTo(0, 0);
+	            var oFrame = document.getElementById('jobviteframe');
+	            if (oFrame) oFrame.height = height;
+	      }
+	</script>";
+	
+	
+	return $iframe;
+	
+	
+	
+}
+
+function provide_jobs_listing(){
+	global $base_url;
+	
+	$path = drupal_get_path('module', 'provide_jobs');
+	$path =  $base_url.'/'.$path.'/framesize.html';
+	$joburl = 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qRY9VfwD&cs=943aVfwW&nl=0';
+	
+	
+	$iframe = "<iframe id=\"jobviteframe\" src=\"".$joburl."&jvresize=".$path."\" width=\"100%\" height=\"500px\" scrolling=\"no\" frameborder=\"0\" allowtransparency =\"true\">Sorry, iframes are not supported.</iframe>
+	<script type=\"text/javascript\">
+	      var l = location.href;
+	      var args = '';
+	      var k = '';
+	      var iStart = l.indexOf('?jvk=');
+	      if (iStart == -1) iStart = l.indexOf('&jvk=');
+	      if (iStart != -1) {
+	            iStart += 5;
+	            var iEnd = l.indexOf('&', iStart);
+	            if (iEnd == -1) iEnd = l.length;
+	            k = l.substring(iStart, iEnd);
+	      }
+	      iStart = l.indexOf('?jvi=');
+	      if (iStart == -1) iStart = l.indexOf('&jvi=');
+	      if (iStart != -1) {
+	            iStart += 5;
+	            var iEnd = l.indexOf('&', iStart);
+	            if (iEnd == -1) iEnd = l.length;
+	            args += '&j=' + l.substring(iStart, iEnd);
+	            if (!k.length) args += '&k=Job';
+	            var iStart = l.indexOf('?jvs=');
+	            if (iStart == -1) iStart = l.indexOf('&jvs=');
+	            if (iStart != -1){
+	                  iStart += 5;
+	                  var iEnd = l.indexOf('&', iStart);
+	                  if (iEnd == -1) iEnd = l.length;
+	                  args += '&s=' + l.substring(iStart, iEnd);
+	            }
+	      }
+	      if (k.length) args += '&k=' + k;
+	      if (args.length) document.getElementById('jobviteframe').src += args;
+	      function resizeFrame(height, scrollToTop) {
+	            if (scrollToTop) window.scrollTo(0, 0);
+	            var oFrame = document.getElementById('jobviteframe');
+	            if (oFrame) oFrame.height = height;
+	      }
+	</script>";
+	
+	
+	return $iframe;
+	
+	
+	
+	
+}
+
+// sign up for alerts
+function provide_jobs_signup_alerts() {
+	global $base_url;
+	
+	$path = drupal_get_path('module', 'provide_jobs');
+	$path =  $base_url.'/'.$path.'/framesize.html';
+	$joburl = 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qRY9VfwD&cs=943aVfwW&nl=0&k=Notify';
+	
+	
+	$iframe = "<iframe id=\"jobviteframe\" src=\"".$joburl."&jvresize=".$path."\" width=\"100%\" height=\"500px\" scrolling=\"no\" frameborder=\"0\" allowtransparency =\"true\">Sorry, iframes are not supported.</iframe>
+	<script type=\"text/javascript\">
+	      var l = location.href;
+	      var args = '';
+	      var k = '';
+	      var iStart = l.indexOf('?jvk=');
+	      if (iStart == -1) iStart = l.indexOf('&jvk=');
+	      if (iStart != -1) {
+	            iStart += 5;
+	            var iEnd = l.indexOf('&', iStart);
+	            if (iEnd == -1) iEnd = l.length;
+	            k = l.substring(iStart, iEnd);
+	      }
+	      iStart = l.indexOf('?jvi=');
+	      if (iStart == -1) iStart = l.indexOf('&jvi=');
+	      if (iStart != -1) {
+	            iStart += 5;
+	            var iEnd = l.indexOf('&', iStart);
+	            if (iEnd == -1) iEnd = l.length;
+	            args += '&j=' + l.substring(iStart, iEnd);
+	            if (!k.length) args += '&k=Job';
+	            var iStart = l.indexOf('?jvs=');
+	            if (iStart == -1) iStart = l.indexOf('&jvs=');
+	            if (iStart != -1){
+	                  iStart += 5;
+	                  var iEnd = l.indexOf('&', iStart);
+	                  if (iEnd == -1) iEnd = l.length;
+	                  args += '&s=' + l.substring(iStart, iEnd);
+	            }
+	      }
+	      if (k.length) args += '&k=' + k;
+	      if (args.length) document.getElementById('jobviteframe').src += args;
+	      function resizeFrame(height, scrollToTop) {
+	            if (scrollToTop) window.scrollTo(0, 0);
+	            var oFrame = document.getElementById('jobviteframe');
+	            if (oFrame) oFrame.height = height;
+	      }
+	</script>";
+	
+	
+	return $iframe;
+	
+	
+	
+	
+}
+
+function provide_jobs_link_search(){
+	$locs = '';
+	$cats = '';
+	
+	 $feed_url = 'http://www.jobvite.com/CompanyJobs/Xml.aspx?c=qRY9VfwD';
+
+	  	$locations = array();
+		$categories = array();
+        $nlocations = array();
+		$ncategories = array();
+        $nlocations[0] = 'Select Location';
+        $ncategories[0] = 'Select Category';
+
+
+	 $result = drupal_http_request($feed_url);
+
+
+
+	    if ($result->data) {
+
+			if (!$result->data) {
+			    watchdog("provide_jobs", "Could not process feed for jobs", WATCHDOG_ERROR);
+			    return;
+			  }
+
+			$doc = DOMDocument::loadXML($result->data);
+
+			$xp = new DOMXpath($doc);
+
+			$jobs = $xp->query('/result/job');
+
+			if ($jobs->length > 0) {
+				for ($i = 0; $i < $jobs->length; $i++) {
+					$locations[] = _provide_jobs_get_node_value('location', $jobs->item($i), $xp);
+					$categories[] = _provide_jobs_get_node_value('category', $jobs->item($i), $xp);
+
+				}
+			}
+
+			$locations = array_unique($locations, SORT_REGULAR);
+			$locations = array_splice($locations,0,count($locations));
+			$locs .= '<ul>';
+			foreach($locations as $key=>$value){
+			    $locs .= '<li><a href="/join-our-team/careers/'.urlencode(str_replace("/","|",$value)).'/0">'.str_replace(', United States','',$value).'</a></li>';
+			}
+			$locs .= '</ul>';
+
+
+			$categories = array_unique($categories, SORT_REGULAR);
+			$categories = array_splice($categories,0,count($categories));
+            $cats = '<ul>';
+			foreach($categories as $key=>$value){
+			    $cats .= '<li><a href="/join-our-team/careers/0/'.urlencode(str_replace("/","|",$value)).'">'.$value.'</a></li>';
+			}
+			$cats .= '</ul>';
+
+
+	    }
+	
+
+	 $html = '<div class="by-category"><h3 class="text slate">Search by Department</h3>';
+	 $html .= $cats;
+	 $html .= '</div><div class="by-location"><h3 class="text slate">Search by Location</h3>'; 
+	 $html .= $locs;
+	 $html .= '</div>';
+	
+	return $html;
+}
+
+function provide_jobs_apply(){
+	//http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qRY9VfwD&jvprefix=http%3a%2f%2fprovide-commerce.meaclients.com&jvresize=http%3a%2f%2fprovide-commerce.meaclients.com%2fsites%2fall%2fmodules%2fcustom%2fprovide_jobs%2fframesize.html&page=alljobs
+	
+	global $base_url;
+	
+	$path = drupal_get_path('module', 'provide_jobs');
+	$path =  $base_url.'/'.$path.'/framesize.html';
+	//$joburl = 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qRY9VfwD&page=alljobs';
+	$joburl = 'http://hire.jobvite.com/CompanyJobs/Careers.aspx?c=qRY9VfwD&cs=943aVfwW&nl=0&page=Apply'; //new url
+	
+	$iframe = "<iframe id=\"jobviteframe\" src=\"".$joburl."&jvresize=".$path."\" width=\"100%\" height=\"500px\" scrolling=\"no\" frameborder=\"0\" allowtransparency =\"true\">Sorry, iframes are not supported.</iframe>
+	<script type=\"text/javascript\">
+	      var l = location.href;
+	      var args = '';
+	      var k = '';
+	      var iStart = l.indexOf('?jvk=');
+	      if (iStart == -1) iStart = l.indexOf('&jvk=');
+	      if (iStart != -1) {
+	            iStart += 5;
+	            var iEnd = l.indexOf('&', iStart);
+	            if (iEnd == -1) iEnd = l.length;
+	            k = l.substring(iStart, iEnd);
+	      }
+	      iStart = l.indexOf('?jvi=');
+	      if (iStart == -1) iStart = l.indexOf('&jvi=');
+	      if (iStart != -1) {
+	            iStart += 5;
+	            var iEnd = l.indexOf('&', iStart);
+	            if (iEnd == -1) iEnd = l.length;
+	            args += '&j=' + l.substring(iStart, iEnd);
+	            if (!k.length) args += '&k=Job';
+	            var iStart = l.indexOf('?jvs=');
+	            if (iStart == -1) iStart = l.indexOf('&jvs=');
+	            if (iStart != -1){
+	                  iStart += 5;
+	                  var iEnd = l.indexOf('&', iStart);
+	                  if (iEnd == -1) iEnd = l.length;
+	                  args += '&s=' + l.substring(iStart, iEnd);
+	            }
+	      }
+	      if (k.length) args += '&k=' + k;
+	      if (args.length) document.getElementById('jobviteframe').src += args;
+	      function resizeFrame(height, scrollToTop) {
+	            if (scrollToTop) window.scrollTo(0, 0);
+	            var oFrame = document.getElementById('jobviteframe');
+	            if (oFrame) oFrame.height = height;
+	      }
+	</script>";
+	return $iframe;
+}

@@ -1,0 +1,333 @@
+<?php
+function provide_donations_schema() {
+ $schema['provide_donations'] = array(
+ 'description' => t('The base table for donations.'),
+ 'fields' => array(
+ 	'id' => array(
+ 		'description' => t('The primary identifier'),
+ 		'type' => 'serial',
+ 		'unsigned' => TRUE,
+ 		'not null' => TRUE
+    	),
+ 	'org_name' => array(
+ 		'description' => t('Organization Name.'),
+ 		'type' => 'varchar',
+ 		'length' => '120',
+ 		'not null' => TRUE
+		),
+	 'org_phone' => array(
+	 	'description' => t('Organization Phone.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'org_address' => array(
+	 	'description' => t('Organization Address.'),
+	 	'type' => 'varchar',
+	 	'length' => '120',
+	 	'not null' => TRUE
+		),
+	 'org_address2' => array(
+	 	'description' => t('Organization Address2.'),
+	 	'type' => 'varchar',
+	 	'length' => '120',
+		),
+	 'org_city' => array(
+	 	'description' => t('Organization  City.'),
+	 	'type' => 'varchar',
+	 	'length' => '120',
+	 	'not null' => TRUE
+	    ),
+	 'org_state' => array(
+	 	'description' => t('Organization  State.'),
+	 	'type' => 'varchar',
+	 	'length' => '12',
+	 	'not null' => TRUE
+	    ),
+	 'org_zip' => array(
+	 	'description' => t('Organization  Zip.'),
+	 	'type' => 'varchar',
+	 	'length' => '16',
+	 	'not null' => TRUE
+	    ),
+	 'org_taxid' => array(
+	 	'description' => t('Organization  TaxID.'),
+	 	'type' => 'varchar',
+	 	'length' => '25',
+	 	'not null' => TRUE
+	    ),
+	 'org_url' => array(
+	 	'description' => t('Org Url.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'org_description' => array(
+	 	'description' => t('Organization  DEscription.'),
+	 	'type' => 'text'
+	 	),
+	 'money_raised' => array(
+	 	'description' => t('Money Raised.'),
+	 	'type' => 'varchar',
+	 	'length' => '80',
+	 	'not null' => TRUE
+	    ),
+	 'link' => array(
+	 	'description' => t('Site Link.'),
+	 	'type' => 'varchar',
+	 	'length' => '10',
+	    'not null' => TRUE
+	    ),
+	 'web_contact_name' => array(
+	 	'description' => t('WEb Contact Name.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'web_site_url' => array(
+	 	'description' => t('Site Url.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'web_contact_email' => array(
+	 	'description' => t('WEb Contact Email.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'web_contact_phone' => array(
+	 	'description' => t('WEb Contact Phone.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'web_link_length' => array(
+	 	'description' => t('Link Length.'),
+	 	'type' => 'varchar',
+	 	'length' => '80'
+	    ),
+	 'web_explain' => array(
+	 	'description' => t('Weblink Explain.'),
+	 	'type' => 'text'
+	 	),
+	 'event_name' => array(
+	 	'description' => t('Event Name.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'event_location' => array(
+	 	'description' => t('Event Location.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'event_date' => array(
+	 	'description' => t('Event date.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'no_attendees' => array(
+	 	'description' => t('No Attendees.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'event_delivery_location' => array(
+	 	'description' => t('Event Delivery Location.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'event_address' => array(
+	 	'description' => t('Event Address.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'event_address2' => array(
+	 	'description' => t('Event Address2.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'event_city' => array(
+	 	'description' => t('Event City.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'event_state' => array(
+	 	'description' => t('Event State.'),
+	 	'type' => 'varchar',
+	 	'length' => '20'
+	    ),
+	 'event_zip' => array(
+	 	'description' => t('Event Zip Code.'),
+	 	'type' => 'varchar',
+	 	'length' => '60'
+	    ),
+	 'event_delivery_date' => array(
+	 	'description' => t('Event delivery date.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'donation_contact_name' => array(
+	 	'description' => t('Donation Contact Name.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'donation_email' => array(
+	 	'description' => t('Donation Email.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'donation_phone' => array(
+	 	'description' => t('Donation Phone.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'donation_type' => array(
+	 	'description' => t('Donation Type.'),
+	 	'type' => 'varchar',
+	 	'length' => '80'
+	    ),
+	 'created' => array(
+	 	'description' => t('Created.'),
+	 	'type' => 'int'
+	    ),
+	),
+ 'primary key' => array('id'),
+ );
+
+//table for gift certificates
+$schema['provide_gift_certificates'] = array(
+ 'description' => t('The base table for Gift Certificates.'),
+ 'fields' => array(
+ 	'id' => array(
+ 		'description' => t('The primary identifier'),
+ 		'type' => 'serial',
+ 		'unsigned' => TRUE,
+ 		'not null' => TRUE
+    	),
+	'did' => array(
+	 	'description' => t('Donation ID'),
+	 	'type' => 'int',
+	 	'unsigned' => TRUE,
+	 	'not null' => TRUE
+	    ),
+ 	'cert_qty' => array(
+ 		'description' => t('Quantity.'),
+ 		'type' => 'int',
+ 		'not null' => TRUE
+		),
+	 'cert_brand' => array(
+	 	'description' => t('Certificate Brand.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'cert_amount' => array(
+	 	'description' => t('Certificate Amount.'),
+	 	'type' => 'varchar',
+	 	'length' => '80'
+	    ),
+		'cert_prod_type' => array(
+		 	'description' => t('Certificate Product Type.'),
+		 	'type' => 'varchar',
+		 	'length' => '80'
+		    ),
+	 'created' => array(
+	 	'description' => t('Created.'),
+	 	'type' => 'int'
+	    ),
+	),
+ 'primary key' => array('id'),
+ );
+//products table  cert_prod_type
+$schema['provide_products'] = array(
+ 'description' => t('The base table for Donation Products.'),
+ 'fields' => array(
+ 	'id' => array(
+ 		'description' => t('The primary identifier'),
+ 		'type' => 'serial',
+ 		'unsigned' => TRUE,
+ 		'not null' => TRUE
+    	),
+	'did' => array(
+	 	'description' => t('Donation ID'),
+	 	'type' => 'int',
+	 	'unsigned' => TRUE,
+	 	'not null' => TRUE
+	    ),
+ 	'prod_qty' => array(
+ 		'description' => t('Quantity.'),
+ 		'type' => 'int',
+ 		'not null' => TRUE
+		),
+	 'prod_brand' => array(
+	 	'description' => t('Certificate Brand.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'prod_name' => array(
+	 	'description' => t('Product name.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'prod_item_number' => array(
+	 	'description' => t('Product item number.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'prod_comments' => array(
+	 	'description' => t('Product comments.'),
+	 	'type' => 'text'
+	    ),
+	 'created' => array(
+	 	'description' => t('Created.'),
+	 	'type' => 'int'
+	    ),
+	),
+ 'primary key' => array('id'),
+ );
+
+//cash table
+$schema['provide_cash'] = array(
+ 'description' => t('The base table for Donation Cash.'),
+ 'fields' => array(
+ 	'id' => array(
+ 		'description' => t('The primary identifier'),
+ 		'type' => 'serial',
+ 		'unsigned' => TRUE,
+ 		'not null' => TRUE
+    	),
+	'did' => array(
+	 	'description' => t('Donation ID'),
+	 	'type' => 'int',
+	 	'unsigned' => TRUE,
+	 	'not null' => TRUE
+	    ),
+ 	'cash_amount' => array(
+ 		'description' => t('Cash Amount.'),
+ 		'type' => 'varchar',
+ 		'length' => '120'
+		),
+	 'cash_comments' => array(
+	 	'description' => t('Comments.'),
+	 	'type' => 'text'
+	    ),
+	 'cash_file' => array(
+	 	'description' => t('File.'),
+	 	'type' => 'varchar',
+	 	'length' => '120'
+	    ),
+	 'created' => array(
+	 	'description' => t('Created.'),
+	 	'type' => 'int'
+	    ),
+
+	),
+ 'primary key' => array('id'),
+ );
+
+return $schema;
+}
+
+
+function provide_donations_install() {
+  // Create my tables.
+  drupal_install_schema('provide_donations');
+}
+
+function provide_donations_uninstall() {
+  // Drop my tables.
+  drupal_uninstall_schema('provide_donations');
+}

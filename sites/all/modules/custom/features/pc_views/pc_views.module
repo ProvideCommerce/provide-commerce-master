@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the pc views feature.
+ */
+
+include_once 'pc_views.features.inc';
