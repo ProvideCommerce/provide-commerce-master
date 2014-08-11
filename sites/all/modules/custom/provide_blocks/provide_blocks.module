@@ -85,17 +85,17 @@ function provide_blocks_block_info() {
   $blocks['promo-our-story'] = array(
   	'info' => t('Promo: Our Story'),
   );
-  
   $blocks['promo-job-alerts'] = array(
   	'info' => t('Promo: Job Alerts'),
   );
-  
   $blocks['google-map'] = array(
   	'info' => t('Custom: Google Map'),
   );
-  
   $blocks['contact-us-image'] = array(
   	'info' => t('Custom: Contact Us Image'),
+  );
+  $blocks['social-media-block'] = array(
+  	'info' => t('Custom: Social Media Block'),
   );
 	
   return $blocks;
@@ -147,15 +147,6 @@ function provide_blocks_block_view($delta='') {
 			$block['content'] .= '<p class="intro">Our phone number is</p>';
 			$block['content'] .= '<p class="number">858-729-2800</p>';
 			$block['content'] .= '</div>';
-			$block['content'] .= '<div class="social">';
-			$block['content'] .= '<p class="intro">Facebook</p>';
-			$block['content'] .= '<p class="sociallink"><a href="http://www.facebook.com/ProvideCommerce/">facebook.com/ProvideCommerce</a></p>';
-			$block['content'] .= '<p class="intro">LinkedIn</p>';
-			$block['content'] .= '<p class="sociallink"><a href="http://www.linkedin.com/company/provide-commerce/">linkedin.com/company/provide-commerce</a></p>';
-			$block['content'] .= '<p class="intro">Twitter</p>';
-			$block['content'] .= '<p class="sociallink"><a href="http://www.twitter.com/ProvideCommerce/">twitter.com/ProvideCommerce</a></p>';
-			$block['content'] .= '</div>';
-			//$block['content'] .= '<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/ProvideCommerce" data-widget-id="491102107932454912">Tweets by @ProvideCommerce</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>';
 			$block['content'] .= '</div>';
         	break;
         case 'benefits-block':
@@ -227,21 +218,25 @@ function provide_blocks_block_view($delta='') {
 	        $block['subject'] = '';
 	        $block['content'] = promo_block(327);
 	       break;
-		
 		case 'promo-job-alerts':
 	        $block['subject'] = '';
 	        $block['content'] = promo_block(1035);
 	       break;
-	       
 		case 'google-map':
 	        $block['subject'] = '';
 	        $block['content'] = '<iframe width="310" height="290" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Provide+Commerce&amp;aq=&amp;sll=37.269174,-119.306607&amp;sspn=13.118819,26.191406&amp;ie=UTF8&amp;hq=Provide+Commerce&amp;hnear=&amp;t=h&amp;ll=32.86863,-117.215881&amp;spn=0.16725,0.322037&amp;z=11&amp;output=embed"></iframe>';
 	       break;
-	    
 	    case 'contact-us-image':
 	        $block['subject'] = '';
 	        $block['content'] = '<img src="/'.drupal_get_path('theme', 'provide').'/includes/images/global/contact-us.jpg" height="290" width="470" />';
 	       break;
+		case 'social-media-block':
+			$block['subject'] = '';
+			$block['content'] = '<h3>We\'re social, come join us!</h3>';
+			$block['content'] .= '<div class="social-block"><a href="https://www.facebook.com/ProvideCommerce" class="clearfix"><div class="social-img social-img-facebook"></div><div class="social-cont"><div class="bg">Facebook</div><div class="sm">facebook.com/ProvideCommerce</div></div></a></div>';
+			$block['content'] .= '<div class="social-block"><a href="https://www.linkedin.com/company/provide-commerce" class="clearfix"><div class="social-img social-img-linkedin"></div><div class="social-cont"><div class="bg">LinkedIn</div><div class="sm">linkedin.com/company/provide-commerce</div></div></a></div>';
+			$block['content'] .= '<div class="social-block"><a href="https://twitter.com/ProvideCommerce" class="clearfix"><div class="social-img social-img-twitter"></div><div class="social-cont"><div class="bg">Twitter</div><div class="sm">twitter.com/ProvideCommerce</div></div></a></div>';
+		   break;
     }
     return $block;
 }
