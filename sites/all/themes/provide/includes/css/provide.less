@@ -45,7 +45,20 @@
 @font31:31px;
 @font32:32px;
 
+/* MyriadPro Font-Face */
+@font-face {
+	font-family: 'Myriad Pro Regular';
+	font-style: normal;
+	font-weight: normal;
+	src: local('Myriad Pro Regular'), url('../customfonts/MYRIADPRO-REGULAR.woff') format('woff');
+}
 
+@font-face {
+	font-family: 'Myriad Pro Semibold';
+	font-style: normal;
+	font-weight: normal;
+	src: local('Myriad Pro Semibold'), url('../customfonts/MYRIADPRO-SEMIBOLD.woff') format('woff');
+}
 
 /* Additional Typography */
 html, body { color:@slate; font-family:"Museo Slab"; font-size:@font14; font-weight:300; letter-spacing:0.03em; line-height:24px; }
@@ -1075,7 +1088,7 @@ p, li {
 		font-size: 18px;
 		line-height: 100%;
 		padding-bottom: 23px;
-		font-weight: bold;
+		font-family: 'Myriad Pro Semibold';
 		letter-spacing: 0em;
 	}
 	.social-block {
@@ -1096,8 +1109,8 @@ p, li {
 		width: 227px;
 		padding-left: 13px;
 		color: #ffffff;
-		.bg { font-size: 16px; font-weight: bold; }
-		.sm { font-size: 12px; }
+		.bg { font-size: 16px; font-family: 'Myriad Pro Semibold'; }
+		.sm { font-size: 12px; font-family: 'Myriad Pro Regular'; }
 	}
 }
 
