@@ -233,9 +233,9 @@ function provide_blocks_block_view($delta='') {
 		case 'social-media-block':
 			$block['subject'] = '';
 			$block['content'] = '<h3>We\'re social, come join us!</h3>';
-			$block['content'] .= '<div class="social-block"><a href="https://www.facebook.com/ProvideCommerce" class="clearfix"><div class="social-img social-img-facebook"></div><div class="social-cont"><div class="bg">Facebook</div><div class="sm">facebook.com/ProvideCommerce</div></div></a></div>';
-			$block['content'] .= '<div class="social-block"><a href="https://www.linkedin.com/company/provide-commerce" class="clearfix"><div class="social-img social-img-linkedin"></div><div class="social-cont"><div class="bg">LinkedIn</div><div class="sm">linkedin.com/company/provide-commerce</div></div></a></div>';
-			$block['content'] .= '<div class="social-block"><a href="https://twitter.com/ProvideCommerce" class="clearfix"><div class="social-img social-img-twitter"></div><div class="social-cont"><div class="bg">Twitter</div><div class="sm">twitter.com/ProvideCommerce</div></div></a></div>';
+			$block['content'] .= '<div class="social-block"><a href="https://www.facebook.com/ProvideCommerce" class="clearfix" target="_blank"><div class="social-img social-img-facebook"></div><div class="social-cont"><div class="bg">Facebook</div><div class="sm">facebook.com/ProvideCommerce</div></div></a></div>';
+			$block['content'] .= '<div class="social-block"><a href="https://www.linkedin.com/company/provide-commerce" class="clearfix" target="_blank"><div class="social-img social-img-linkedin"></div><div class="social-cont"><div class="bg">LinkedIn</div><div class="sm">linkedin.com/company/provide-commerce</div></div></a></div>';
+			$block['content'] .= '<div class="social-block"><a href="https://twitter.com/ProvideCommerce" class="clearfix" target="_blank"><div class="social-img social-img-twitter"></div><div class="social-cont"><div class="bg">Twitter</div><div class="sm">twitter.com/ProvideCommerce</div></div></a></div>';
 		   break;
     }
     return $block;
