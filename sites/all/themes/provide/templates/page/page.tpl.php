@@ -75,7 +75,17 @@
 
 
 <div id="site-wrap" <?php print phptemplate_page_attributes($is_front); ?>>
-
+	
+	<div id="top-banner-wrap">
+		<div class="top-banner">
+			<a class="ftd-logo" href="http://www.ftdcompanies.com"><img src="http://www.ftdcompanies.com/images/logoblack.png" alt="ftd logo" /></a>
+			<div class="ftd-text">
+				Provide Commerce is now part of FTD Companies, Inc. Our mission is to be the leading and most trusted floral and gifting company in the world. Together, we include a diversified portfolio of brands including FTD, ProFlowers, Personal Creations, Shari’s Berries, Gifts.com, ProPlants, Kalla, Cherry Moon Farms, Sincerely; and in the United Kingdom: Interflora, Flowers Direct, Drake Algar and Flying Flowers. FTD Companies, Inc. is headquartered in Downers Grove, IL. For more information, please visit <a href="http://www.ftdcompanies.com">www.ftdcompanies.com</a>.
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	
 	<div id="header-wrap">
 		
 		<?php if ($page['header']): ?>
